@@ -40,7 +40,7 @@
 
   
   
-  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+  <link href="/hexo_blog/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
 
 
 
@@ -48,21 +48,21 @@
 
 
 
-<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+<link href="/hexo_blog/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
-
-
-  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+<link href="/hexo_blog/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
 
 
-  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+  <link rel="apple-touch-icon" sizes="180x180" href="/hexo_blog/images/apple-touch-icon-next.png?v=5.1.4">
 
 
-  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+  <link rel="icon" type="image/png" sizes="32x32" href="/hexo_blog/images/favicon-32x32-next.png?v=5.1.4">
 
 
-  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+  <link rel="icon" type="image/png" sizes="16x16" href="/hexo_blog/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/hexo_blog/images/logo.svg?v=5.1.4" color="#222">
 
 
 
@@ -82,36 +82,36 @@
 <meta name="description" content="本文主要讲如何通过HOG特征和SVM分类器实现部分交通标志的检测。由于能力有限，本文的检测思路很简单，主要是用来自己练习编程用，也顺便发布出来供需要的人参考。本项目完整的代码可以在我的github上下载：traffic-sign-detection。博客或代码中遇到的任何问题，欢迎指出，希望能相互学习。废话不多说了，下面就来一步步介绍我的检测过程。** 数据集数据集都是我的一个学妹帮忙采集的。在此">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一次不太成功的项目实战：HOG特征+SVM实现交通标志的检测">
-<meta property="og:url" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/index.html">
+<meta property="og:url" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/index.html">
 <meta property="og:site_name" content="Meringue&#39;s Blog">
 <meta property="og:description" content="本文主要讲如何通过HOG特征和SVM分类器实现部分交通标志的检测。由于能力有限，本文的检测思路很简单，主要是用来自己练习编程用，也顺便发布出来供需要的人参考。本项目完整的代码可以在我的github上下载：traffic-sign-detection。博客或代码中遇到的任何问题，欢迎指出，希望能相互学习。废话不多说了，下面就来一步步介绍我的检测过程。** 数据集数据集都是我的一个学妹帮忙采集的。在此">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img1.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img2.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//pos_neg_examples.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//affine.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img4.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img6.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//out_video2.gif">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//Figure_1.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img7.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img8.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img9.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img10.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img11.png">
-<meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img12.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img1.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img2.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//pos_neg_examples.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//affine.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img4.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img6.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//out_video2.gif">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//Figure_1.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img7.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img8.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img9.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img10.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img11.png">
+<meta property="og:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img12.png">
 <meta property="og:updated_time" content="2018-07-23T11:39:13.285Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一次不太成功的项目实战：HOG特征+SVM实现交通标志的检测">
 <meta name="twitter:description" content="本文主要讲如何通过HOG特征和SVM分类器实现部分交通标志的检测。由于能力有限，本文的检测思路很简单，主要是用来自己练习编程用，也顺便发布出来供需要的人参考。本项目完整的代码可以在我的github上下载：traffic-sign-detection。博客或代码中遇到的任何问题，欢迎指出，希望能相互学习。废话不多说了，下面就来一步步介绍我的检测过程。** 数据集数据集都是我的一个学妹帮忙采集的。在此">
-<meta name="twitter:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img1.png">
+<meta name="twitter:image" content="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img1.png">
 
 
 
 <script type="text/javascript" id="hexo.configurations">
   var NexT = window.NexT || {};
   var CONFIG = {
-    root: '/',
+    root: '/hexo_blog/',
     scheme: 'Pisces',
     version: '5.1.4',
     sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
@@ -134,7 +134,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/"/>
+  <link rel="canonical" href="https://z_jiahuan.gitee.io/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/"/>
 
 
 
@@ -168,7 +168,7 @@
     
 
     <div class="custom-logo-site-title">
-      <a href="/"  class="brand" rel="start">
+      <a href="/hexo_blog/"  class="brand" rel="start">
         <span class="logo-line-before"><i></i></span>
         <span class="site-title">Meringue's Blog</span>
         <span class="logo-line-after"><i></i></span>
@@ -196,7 +196,7 @@
       
         
         <li class="menu-item menu-item-home">
-          <a href="/" rel="section">
+          <a href="/hexo_blog/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
             
@@ -206,7 +206,7 @@
       
         
         <li class="menu-item menu-item-tags">
-          <a href="/tags/" rel="section">
+          <a href="/hexo_blog/tags/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
             
@@ -216,7 +216,7 @@
       
         
         <li class="menu-item menu-item-categories">
-          <a href="/categories/" rel="section">
+          <a href="/hexo_blog/categories/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
@@ -226,7 +226,7 @@
       
         
         <li class="menu-item menu-item-archives">
-          <a href="/archives/" rel="section">
+          <a href="/hexo_blog/archives/" rel="section">
             
               <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
             
@@ -267,12 +267,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/">
+    <link itemprop="mainEntityOfPage" href="https://z_jiahuan.gitee.io/hexo_blog/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Meringue">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/emoji.jpg">
+      <meta itemprop="image" content="/hexo_blog/images/emoji.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -336,7 +336,7 @@
       
         <p><strong>本文主要讲如何通过HOG特征和SVM分类器实现部分交通标志的检测。由于能力有限，本文的检测思路很简单，主要是用来自己练习编程用，也顺便发布出来供需要的人参考。本项目完整的代码可以在我的github上下载：<a href="https://github.com/ZhouJiaHuan/traffic-sign-detection" target="_blank" rel="noopener">traffic-sign-detection</a>。博客或代码中遇到的任何问题，欢迎指出，希望能相互学习。</strong>废话不多说了，下面就来一步步介绍我的检测过程。**</p>
 <h1 id="数据集"><a href="#数据集" class="headerlink" title="数据集"></a>数据集</h1><p>数据集都是我的一个学妹帮忙采集的。在此表示感谢。本文一共选用了6种交通标志，分别为：</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img1.png" alt="data"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img1.png" alt="data"></p>
 <h2 id="数据预处理"><a href="#数据预处理" class="headerlink" title="数据预处理"></a>数据预处理</h2><p>一共拍了1465张照片，由于是用手机在路上拍的，图像像素过大且大小不一（有的是横着拍的，有的数竖着拍的），影响检测效率。因此，我先将所有的图片进行了预处理，具体处理步骤为：<br> （1）以图片宽和高较小的值为裁剪的边长S，从原图中裁剪出S×S的正方形中心区域；<br> （2）将裁剪出的区域resize为640×640；<br> 处理的主要函数如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">center_crop</span><span class="params">(img_array, crop_size=<span class="number">-1</span>, resize=<span class="number">-1</span>, write_path=None)</span>:</span></span><br><span class="line">	<span class="string">""" crop and resize a square image from the centeral area.</span></span><br><span class="line"><span class="string">	Args:</span></span><br><span class="line"><span class="string">		img_array: image array</span></span><br><span class="line"><span class="string">		crop_size: crop_size (default: -1, min(height, width)).</span></span><br><span class="line"><span class="string">		resize: resized size (default: -1, keep cropped size)</span></span><br><span class="line"><span class="string">		write_path: write path of the image (default: None, do not write to the disk).</span></span><br><span class="line"><span class="string">	Return:</span></span><br><span class="line"><span class="string">		img_crop: copped and resized image.</span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	rows = img_array.shape[<span class="number">0</span>]</span><br><span class="line">	cols = img_array.shape[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> crop_size==<span class="number">-1</span> <span class="keyword">or</span> crop_size&gt;max(rows,cols):</span><br><span class="line">		crop_size = min(rows, cols)</span><br><span class="line">	row_s = max(int((rows-crop_size)/<span class="number">2</span>), <span class="number">0</span>)</span><br><span class="line">	row_e = min(row_s+crop_size, rows) </span><br><span class="line">	col_s = max(int((cols-crop_size)/<span class="number">2</span>), <span class="number">0</span>)</span><br><span class="line">	col_e = min(col_s+crop_size, cols)</span><br><span class="line"></span><br><span class="line">	img_crop = img_array[row_s:row_e,col_s:col_e,]</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> resize&gt;<span class="number">0</span>:</span><br><span class="line">		img_crop = cv2.resize(img_crop, (resize, resize))</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> write_path <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>:</span><br><span class="line">		cv2.imwrite(write_path, img_crop)</span><br><span class="line">	<span class="keyword">return</span> img_crop</span><br></pre></td></tr></table></figure></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crop_img_dir</span><span class="params">(img_dir,  save_dir, crop_method = <span class="string">"center"</span>, rename_pre=<span class="number">-1</span>)</span>:</span></span><br><span class="line">	<span class="string">""" crop and save square images from original images saved in img_dir.</span></span><br><span class="line"><span class="string">	Args:</span></span><br><span class="line"><span class="string">		img_dir: image directory.</span></span><br><span class="line"><span class="string">		save_dir: save directory.</span></span><br><span class="line"><span class="string">		crop_method: crop method (default: "center").</span></span><br><span class="line"><span class="string">		rename_pre: prename of all images (default: -1, use primary image name).</span></span><br><span class="line"><span class="string">	Return: none</span></span><br><span class="line"><span class="string">	"""</span></span><br><span class="line">	img_names = os.listdir(img_dir)</span><br><span class="line">	img_names = [img_name <span class="keyword">for</span> img_name <span class="keyword">in</span> img_names <span class="keyword">if</span> img_name.split(<span class="string">"."</span>)[<span class="number">-1</span>]==<span class="string">"jpg"</span>]</span><br><span class="line">	index = <span class="number">0</span></span><br><span class="line">	<span class="keyword">for</span> img_name <span class="keyword">in</span> img_names:</span><br><span class="line">		img = cv2.imread(os.path.join(img_dir, img_name))</span><br><span class="line"></span><br><span class="line">		rename = img_name <span class="keyword">if</span> rename_pre==<span class="number">-1</span> <span class="keyword">else</span> rename_pre+str(index)+<span class="string">".jpg"</span></span><br><span class="line">		img_out_path = os.path.join(save_dir, rename)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> crop_method == <span class="string">"center"</span>:</span><br><span class="line">			img_crop = center_crop(img, resize=<span class="number">640</span>, write_path=img_out_path)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> index%<span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">			<span class="keyword">print</span> <span class="string">"total images number = "</span>, len(img_names), <span class="string">"current image number = "</span>, index</span><br><span class="line">		index += <span class="number">1</span></span><br></pre></td></tr></table></figure>
 <h2 id="数据标注"><a href="#数据标注" class="headerlink" title="数据标注"></a>数据标注</h2><p>标注信息采用和PASCAL VOC数据集一样的方式，对于正样本，直接使用labelImg工具进行标注，这里给出我用的一个版本的链接：<a href="https://pan.baidu.com/s/1Q0cqJI9Dnvxkj7159Be4Sw。" target="_blank" rel="noopener">https://pan.baidu.com/s/1Q0cqJI9Dnvxkj7159Be4Sw。</a> 对于负样本，可以使用python中的xml模块自己写xml标注文件，主要函数如下：</p>
@@ -350,7 +350,7 @@
 <h1 id="检测框架"><a href="#检测框架" class="headerlink" title="检测框架"></a>检测框架</h1><p>本文用的检测思路非常直观，总的来讲分为候选区域提取、HOG特征提取和SVM分类。</p>
 <h2 id="候选区域提取"><a href="#候选区域提取" class="headerlink" title="候选区域提取"></a>候选区域提取</h2><p>理论上可以通过设置不同的滑动窗口对整张图像进行遍历，但是这样做不仅计算太大，而且窗口的大小也不好把握。考虑到我们要检测的交通标志都有比较规则的几何形状和颜色信息，我们可以通过检测形状（平行四边形、椭圆）和颜色（红色、蓝色等）来实现初步的预处理以减少计算量，提高检测效率。这里我们以仅颜色信息为例介绍。</p>
 <p>由于需要检测的6类标志主要是红色和蓝色（或者红蓝结合），环境中的不同光照强度可能会使颜色变化较大因此给定一张图像，先在HSV空间中通过颜色阈值分割选出蓝色和红色对应的区域得到二值化图像。然后对二值化图像进行凸包检测（可通过OpenCV实现），下图给出了一个示例：</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img2.png" alt="bin_img"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img2.png" alt="bin_img"></p>
 <p>可以看出，经过二值化处理后，图像中的3个标志（其中2个标志是我们需要检测识别的）的轮廓信息都被保留下来了。但是存在依然存在一些问题：（1）背景噪声较多，这会导致检测更多的凸包，从而影响检测速度和精度；（2）三个标志离得很近，可能会导致只检测出一个凸包。我之前考虑过用腐蚀膨胀来滤除一部分的噪声，但在实验的时候发现这会导致更多的漏检。这是因为在腐蚀膨胀的时候部分标志的轮廓信息很有可能会被破坏（尤其是禁止鸣笛标志），导致在凸包检测的阶段被遗漏。所以在最终测试的时候并没有使用腐蚀膨胀操作。下面给出阈值化处理和凸包检测的函数：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preprocess_img</span><span class="params">(imgBGR, erode_dilate=True)</span>:</span></span><br><span class="line">    <span class="string">"""preprocess the image for contour detection.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        imgBGR: source image.</span></span><br><span class="line"><span class="string">        erode_dilate: erode and dilate or not.</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        img_bin: a binary image (blue and red).</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    rows, cols, _ = imgBGR.shape</span><br><span class="line">    imgHSV = cv2.cvtColor(imgBGR, cv2.COLOR_BGR2HSV)</span><br><span class="line"></span><br><span class="line">    Bmin = np.array([<span class="number">100</span>, <span class="number">43</span>, <span class="number">46</span>])</span><br><span class="line">    Bmax = np.array([<span class="number">124</span>, <span class="number">255</span>, <span class="number">255</span>])</span><br><span class="line">    img_Bbin = cv2.inRange(imgHSV,Bmin, Bmax)</span><br><span class="line">    </span><br><span class="line">    Rmin1 = np.array([<span class="number">0</span>, <span class="number">43</span>, <span class="number">46</span>])</span><br><span class="line">    Rmax1 = np.array([<span class="number">10</span>, <span class="number">255</span>, <span class="number">255</span>])</span><br><span class="line">    img_Rbin1 = cv2.inRange(imgHSV,Rmin1, Rmax1)</span><br><span class="line">    </span><br><span class="line">    Rmin2 = np.array([<span class="number">156</span>, <span class="number">43</span>, <span class="number">46</span>])</span><br><span class="line">    Rmax2 = np.array([<span class="number">180</span>, <span class="number">255</span>, <span class="number">255</span>])</span><br><span class="line">    img_Rbin2 = cv2.inRange(imgHSV,Rmin2, Rmax2)</span><br><span class="line">    img_Rbin = np.maximum(img_Rbin1, img_Rbin2)</span><br><span class="line">    img_bin = np.maximum(img_Bbin, img_Rbin)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> erode_dilate <span class="keyword">is</span> <span class="keyword">True</span>:</span><br><span class="line">        kernelErosion = np.ones((<span class="number">3</span>,<span class="number">3</span>), np.uint8)</span><br><span class="line">        kernelDilation = np.ones((<span class="number">3</span>,<span class="number">3</span>), np.uint8) </span><br><span class="line">        img_bin = cv2.erode(img_bin, kernelErosion, iterations=<span class="number">2</span>)</span><br><span class="line">        img_bin = cv2.dilate(img_bin, kernelDilation, iterations=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> img_bin</span><br></pre></td></tr></table></figure>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">contour_detect</span><span class="params">(img_bin, min_area=<span class="number">0</span>, max_area=<span class="number">-1</span>, wh_ratio=<span class="number">2.0</span>)</span>:</span></span><br><span class="line">    <span class="string">"""detect contours in a binary image.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        img_bin: a binary image.</span></span><br><span class="line"><span class="string">        min_area: the minimum area of the contours detected.</span></span><br><span class="line"><span class="string">            (default: 0)</span></span><br><span class="line"><span class="string">        max_area: the maximum area of the contours detected.</span></span><br><span class="line"><span class="string">            (default: -1, no maximum area limitation)</span></span><br><span class="line"><span class="string">        wh_ratio: the ration between the large edge and short edge.</span></span><br><span class="line"><span class="string">            (default: 2.0)</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        rects: a list of rects enclosing the contours. if no contour is detected, rects=[]</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    rects = []</span><br><span class="line">    _, contours, _ = cv2.findContours(img_bin.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)</span><br><span class="line">    <span class="keyword">if</span> len(contours) == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> rects</span><br><span class="line"></span><br><span class="line">    max_area = img_bin.shape[<span class="number">0</span>]*img_bin.shape[<span class="number">1</span>] <span class="keyword">if</span> max_area&lt;<span class="number">0</span> <span class="keyword">else</span> max_area</span><br><span class="line">    <span class="keyword">for</span> contour <span class="keyword">in</span> contours:</span><br><span class="line">        area = cv2.contourArea(contour)</span><br><span class="line">        <span class="keyword">if</span> area &gt;= min_area <span class="keyword">and</span> area &lt;= max_area:</span><br><span class="line">            x, y, w, h = cv2.boundingRect(contour)</span><br><span class="line">            <span class="keyword">if</span> <span class="number">1.0</span>*w/h &lt; wh_ratio <span class="keyword">and</span> <span class="number">1.0</span>*h/w &lt; wh_ratio:</span><br><span class="line">                rects.append([x,y,w,h])</span><br><span class="line">    <span class="keyword">return</span> rects</span><br></pre></td></tr></table></figure>
@@ -373,42 +373,42 @@
 <p>上面的返回值proposal_num是用来统计提取的样本数量的。最终我在训练集中获取到的样本数量如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">proposal_num = &#123;<span class="string">'right'</span>: <span class="number">117</span>, <span class="string">'straight'</span>: <span class="number">334</span>, <span class="string">'stop'</span>: <span class="number">224</span>, <span class="string">'no hook'</span>: <span class="number">168</span>, <span class="string">'crosswalk'</span>: <span class="number">128</span>, <span class="string">'left'</span>: <span class="number">208</span>, <span class="string">'background'</span>: <span class="number">1116</span>&#125;</span><br></pre></td></tr></table></figure>
 <p>裁剪的部分正负样本如下：</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\pos_neg_examples.png" alt="pos_neg"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\pos_neg_examples.png" alt="pos_neg"></p>
 <p>前面几行对应6类正样本，最后一行是背景，可以发现，代码中找出来的背景主要是和我们交通标志颜色（蓝色和红色）相似的区域。我们用相同的方法从我们的验证集中提取正负样本用于SVM模型参数的调整和评估。这里就不再赘述。</p>
 <h3 id="训练数据扩充"><a href="#训练数据扩充" class="headerlink" title="训练数据扩充"></a>训练数据扩充</h3><p>从上面各个类别样本数量上来看，正样本的各类标志数量相对背景（负样本）很少。为了近些年数据的平衡，我们对正样本进行了扩充。由于我们的数据中包含了向左向右等标志，如何通过旋转或者镜像变换会出问题（当然可以旋转小范围旋转），我也考虑过亮度变换，但是由于HOG特征中引入了归一化方法使得HOG特征对光照不敏感。最终我选用的是仿射变换，这个可以通过OpenCV很方便地实现，具体的仿射变换理论和代码示例可以参考OpenCV官方教程中的<a href="https://docs.opencv.org/2.4/doc/tutorials/imgproc/imgtrans/warp_affine/warp_affine.html" target="_blank" rel="noopener">Affine Transformations </a>，这里也给出我对数据集仿射变换的函数：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">affine</span><span class="params">(img, delta_pix)</span>:</span></span><br><span class="line">    <span class="string">"""affine transformation</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        img: a numpy image array.</span></span><br><span class="line"><span class="string">        delta_pix: the offset for affine.</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        res: affined image. </span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    rows, cols, _ = img.shape</span><br><span class="line">    pts1 = np.float32([[<span class="number">0</span>,<span class="number">0</span>], [rows,<span class="number">0</span>], [<span class="number">0</span>, cols]])</span><br><span class="line">    pts2 = pts1 + delta_pix</span><br><span class="line">    M = cv2.getAffineTransform(pts1, pts2)</span><br><span class="line">    res = cv2.warpAffine(img, M, (rows, cols))</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">affine_dir</span><span class="params">(img_dir, write_dir, max_delta_pix)</span>:</span></span><br><span class="line">    <span class="string">""" affine transformation on the images in a directory.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        img_dir: image directory.</span></span><br><span class="line"><span class="string">        write_dir: save directory of affined images.</span></span><br><span class="line"><span class="string">        max_delta_pix: the maximum offset for affine.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    img_names = os.listdir(img_dir)</span><br><span class="line">    img_names = [img_name <span class="keyword">for</span> img_name <span class="keyword">in</span> img_names <span class="keyword">if</span> img_name.split(<span class="string">"."</span>)[<span class="number">-1</span>]==<span class="string">"jpg"</span>]</span><br><span class="line">    <span class="keyword">for</span> index, img_name <span class="keyword">in</span> enumerate(img_names):</span><br><span class="line">        img = cv2.imread(os.path.join(img_dir,img_name))</span><br><span class="line">        save_name = os.path.join(write_dir, img_name.split(<span class="string">"."</span>)[<span class="number">0</span>]+<span class="string">"f.jpg"</span>)</span><br><span class="line">        delta_pix = np.float32(np.random.randint(-max_delta_pix, max_delta_pix+<span class="number">1</span>, [<span class="number">3</span>,<span class="number">2</span>]))</span><br><span class="line">        img_a = affine(img, delta_pix)</span><br><span class="line">        cv2.imwrite(save_name, img_a)</span><br></pre></td></tr></table></figure>
 <p>上面函数输入参数max_delta_pix用来控制随机仿射变换的最大强度（正整数），max_delta_pix的绝对值越大，变换越明显（太大可能导致目标信息的完全丢失），我在扩充时这个参数取为10。需要注意的是，10只是变换的最大强度，在对每一张图片进行变换前，会在[-max_delta, max_delta]生成一个随机整数delta_pix（当然你也可以多取几次不同的值来生成更多的变换图片）,这个整数控制了当前图片变换的强度。以下是一些变换的结果示例：</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\affine.png" alt="affine examples"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\affine.png" alt="affine examples"></p>
 <h3 id="模型训练和测试"><a href="#模型训练和测试" class="headerlink" title="模型训练和测试"></a>模型训练和测试</h3><p>模型的训练我是直接调用sklearn中的svm库，很多参数都使用了默认值，在训练时发现，惩罚因子C的取值对训练的影响很大，我这边就偷个懒，大概设置了一个值。（超参数可以利用之前的验证集去调整，这里就不赘述了。）用到的函数如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">load_hog_data</span><span class="params">(hog_txt)</span>:</span></span><br><span class="line">    <span class="string">""" load hog features.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        hog_txt: a txt file used to save hog features.</span></span><br><span class="line"><span class="string">            one line data is formated as "img_path \t cls_num \t hog_feature_vector"</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        img_names: a list of image names.</span></span><br><span class="line"><span class="string">        labels: numpy array labels (1-dim).</span></span><br><span class="line"><span class="string">        hog_feature: numpy array hog features.</span></span><br><span class="line"><span class="string">            formated as [[hog1], [hog2], ...]</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    img_names = []</span><br><span class="line">    labels = []</span><br><span class="line">    hog_features = []</span><br><span class="line">    <span class="keyword">with</span> open(hog_txt, <span class="string">"r"</span>) <span class="keyword">as</span> f:</span><br><span class="line">        data = f.readlines()</span><br><span class="line">        <span class="keyword">for</span> row_data <span class="keyword">in</span> data:</span><br><span class="line">            row_data = row_data.rstrip()</span><br><span class="line">            img_path, label, hog_str = row_data.split(<span class="string">"\t"</span>)</span><br><span class="line">            img_name = img_path.split(<span class="string">"/"</span>)[<span class="number">-1</span>]</span><br><span class="line">            hog_feature = hog_str.split(<span class="string">" "</span>)</span><br><span class="line">            hog_feature = [float(hog) <span class="keyword">for</span> hog <span class="keyword">in</span> hog_feature]</span><br><span class="line">            <span class="comment">#print "hog feature length = ", len(hog_feature)</span></span><br><span class="line">            img_names.append(img_name)</span><br><span class="line">            labels.append(int(label))</span><br><span class="line">            hog_features.append(hog_feature)</span><br><span class="line">    <span class="keyword">return</span> img_names, np.array(labels), np.array(hog_features)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">svm_train</span><span class="params">(hog_features, labels, save_path=<span class="string">"./svm_model.pkl"</span>)</span>:</span></span><br><span class="line">    <span class="string">""" SVM train</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        hog_feature: numpy array hog features.</span></span><br><span class="line"><span class="string">            formated as [[hog1], [hog2], ...]</span></span><br><span class="line"><span class="string">        labels: numpy array labels (1-dim).</span></span><br><span class="line"><span class="string">        save_path: model save path.</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        none.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    clf = SVC(C=<span class="number">10</span>, tol=<span class="number">1e-3</span>, probability = <span class="keyword">True</span>)</span><br><span class="line">    clf.fit(hog_features, labels)</span><br><span class="line">    joblib.dump(clf, save_path)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"finished."</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">svm_test</span><span class="params">(svm_model, hog_feature, labels)</span>:</span></span><br><span class="line">    <span class="string">"""SVM test</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        hog_feature: numpy array hog features.</span></span><br><span class="line"><span class="string">            formated as [[hog1], [hog2], ...]</span></span><br><span class="line"><span class="string">        labels: numpy array labels (1-dim).</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        accuracy: test accuracy.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    clf = joblib.load(svm_model)</span><br><span class="line">    accuracy = clf.score(hog_feature, labels)</span><br><span class="line">    <span class="keyword">return</span> accuracy</span><br></pre></td></tr></table></figure>
 <p>最后，我在3474张训练集（正样本扩充为原来的2倍，负样本没有扩充）上训练，在C=10的时候（其他参数默认），在验证集上（322张）的准确率为97.2%。也就是说有9张图片分类错误，还是可以接受的。</p>
 <h1 id="检测结果"><a href="#检测结果" class="headerlink" title="检测结果"></a>检测结果</h1><p>回顾一下，我们现在已经可以提取候选区域提取并分类了，也就是说，已经可以对一张完整的图片进行检测了。这里给出我的检测代码和检测结果示例。</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np </span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">from</span> skimage <span class="keyword">import</span> feature <span class="keyword">as</span> ft </span><br><span class="line"><span class="keyword">from</span> sklearn.externals <span class="keyword">import</span> joblib</span><br><span class="line"></span><br><span class="line">cls_names = [<span class="string">"straight"</span>, <span class="string">"left"</span>, <span class="string">"right"</span>, <span class="string">"stop"</span>, <span class="string">"nohonk"</span>, <span class="string">"crosswalk"</span>, <span class="string">"background"</span>]</span><br><span class="line">img_label = &#123;<span class="string">"straight"</span>: <span class="number">0</span>, <span class="string">"left"</span>: <span class="number">1</span>, <span class="string">"right"</span>: <span class="number">2</span>, <span class="string">"stop"</span>: <span class="number">3</span>, <span class="string">"nohonk"</span>: <span class="number">4</span>, <span class="string">"crosswalk"</span>: <span class="number">5</span>, <span class="string">"background"</span>: <span class="number">6</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">preprocess_img</span><span class="params">(imgBGR, erode_dilate=True)</span>:</span></span><br><span class="line">    <span class="string">"""preprocess the image for contour detection.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        imgBGR: source image.</span></span><br><span class="line"><span class="string">        erode_dilate: erode and dilate or not.</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        img_bin: a binary image (blue and red).</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    rows, cols, _ = imgBGR.shape</span><br><span class="line">    imgHSV = cv2.cvtColor(imgBGR, cv2.COLOR_BGR2HSV)</span><br><span class="line"></span><br><span class="line">    Bmin = np.array([<span class="number">100</span>, <span class="number">43</span>, <span class="number">46</span>])</span><br><span class="line">    Bmax = np.array([<span class="number">124</span>, <span class="number">255</span>, <span class="number">255</span>])</span><br><span class="line">    img_Bbin = cv2.inRange(imgHSV,Bmin, Bmax)</span><br><span class="line">    </span><br><span class="line">    Rmin1 = np.array([<span class="number">0</span>, <span class="number">43</span>, <span class="number">46</span>])</span><br><span class="line">    Rmax1 = np.array([<span class="number">10</span>, <span class="number">255</span>, <span class="number">255</span>])</span><br><span class="line">    img_Rbin1 = cv2.inRange(imgHSV,Rmin1, Rmax1)</span><br><span class="line">    </span><br><span class="line">    Rmin2 = np.array([<span class="number">156</span>, <span class="number">43</span>, <span class="number">46</span>])</span><br><span class="line">    Rmax2 = np.array([<span class="number">180</span>, <span class="number">255</span>, <span class="number">255</span>])</span><br><span class="line">    img_Rbin2 = cv2.inRange(imgHSV,Rmin2, Rmax2)</span><br><span class="line">    img_Rbin = np.maximum(img_Rbin1, img_Rbin2)</span><br><span class="line">    img_bin = np.maximum(img_Bbin, img_Rbin)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> erode_dilate <span class="keyword">is</span> <span class="keyword">True</span>:</span><br><span class="line">        kernelErosion = np.ones((<span class="number">9</span>,<span class="number">9</span>), np.uint8)</span><br><span class="line">        kernelDilation = np.ones((<span class="number">9</span>,<span class="number">9</span>), np.uint8) </span><br><span class="line">        img_bin = cv2.erode(img_bin, kernelErosion, iterations=<span class="number">2</span>)</span><br><span class="line">        img_bin = cv2.dilate(img_bin, kernelDilation, iterations=<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> img_bin</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">contour_detect</span><span class="params">(img_bin, min_area=<span class="number">0</span>, max_area=<span class="number">-1</span>, wh_ratio=<span class="number">2.0</span>)</span>:</span></span><br><span class="line">    <span class="string">"""detect contours in a binary image.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        img_bin: a binary image.</span></span><br><span class="line"><span class="string">        min_area: the minimum area of the contours detected.</span></span><br><span class="line"><span class="string">            (default: 0)</span></span><br><span class="line"><span class="string">        max_area: the maximum area of the contours detected.</span></span><br><span class="line"><span class="string">            (default: -1, no maximum area limitation)</span></span><br><span class="line"><span class="string">        wh_ratio: the ration between the large edge and short edge.</span></span><br><span class="line"><span class="string">            (default: 2.0)</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        rects: a list of rects enclosing the contours. if no contour is detected, rects=[]</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    rects = []</span><br><span class="line">    _, contours, _ = cv2.findContours(img_bin.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)</span><br><span class="line">    <span class="keyword">if</span> len(contours) == <span class="number">0</span>:</span><br><span class="line">        <span class="keyword">return</span> rects</span><br><span class="line"></span><br><span class="line">    max_area = img_bin.shape[<span class="number">0</span>]*img_bin.shape[<span class="number">1</span>] <span class="keyword">if</span> max_area&lt;<span class="number">0</span> <span class="keyword">else</span> max_area</span><br><span class="line">    <span class="keyword">for</span> contour <span class="keyword">in</span> contours:</span><br><span class="line">        area = cv2.contourArea(contour)</span><br><span class="line">        <span class="keyword">if</span> area &gt;= min_area <span class="keyword">and</span> area &lt;= max_area:</span><br><span class="line">            x, y, w, h = cv2.boundingRect(contour)</span><br><span class="line">            <span class="keyword">if</span> <span class="number">1.0</span>*w/h &lt; wh_ratio <span class="keyword">and</span> <span class="number">1.0</span>*h/w &lt; wh_ratio:</span><br><span class="line">                rects.append([x,y,w,h])</span><br><span class="line">    <span class="keyword">return</span> rects</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">draw_rects_on_img</span><span class="params">(img, rects)</span>:</span></span><br><span class="line">    <span class="string">""" draw rects on an image.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        img: an image where the rects are drawn on.</span></span><br><span class="line"><span class="string">        rects: a list of rects.</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        img_rects: an image with rects.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    img_copy = img.copy()</span><br><span class="line">    <span class="keyword">for</span> rect <span class="keyword">in</span> rects:</span><br><span class="line">        x, y, w, h = rect</span><br><span class="line">        cv2.rectangle(img_copy, (x,y), (x+w,y+h), (<span class="number">0</span>,<span class="number">255</span>,<span class="number">0</span>), <span class="number">2</span>)</span><br><span class="line">    <span class="keyword">return</span> img_copy</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">hog_extra_and_svm_class</span><span class="params">(proposal, clf, resize = <span class="params">(<span class="number">64</span>, <span class="number">64</span>)</span>)</span>:</span></span><br><span class="line">    <span class="string">"""classify the region proposal.</span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        proposal: region proposal (numpy array).</span></span><br><span class="line"><span class="string">        clf: a SVM model.</span></span><br><span class="line"><span class="string">        resize: resize the region proposal</span></span><br><span class="line"><span class="string">            (default: (64, 64))</span></span><br><span class="line"><span class="string">    Return:</span></span><br><span class="line"><span class="string">        cls_prop: propabality of all classes.</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    img = cv2.cvtColor(proposal, cv2.COLOR_BGR2GRAY)</span><br><span class="line">    img = cv2.resize(img, resize)</span><br><span class="line">    bins = <span class="number">9</span></span><br><span class="line">    cell_size = (<span class="number">8</span>, <span class="number">8</span>)</span><br><span class="line">    cpb = (<span class="number">2</span>, <span class="number">2</span>)</span><br><span class="line">    norm = <span class="string">"L2"</span></span><br><span class="line">    features = ft.hog(img, orientations=bins, pixels_per_cell=cell_size, </span><br><span class="line">                        cells_per_block=cpb, block_norm=norm, transform_sqrt=<span class="keyword">True</span>)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"feature = "</span>, features.shape</span><br><span class="line">    features = np.reshape(features, (<span class="number">1</span>,<span class="number">-1</span>))</span><br><span class="line">    cls_prop = clf.predict_proba(features)</span><br><span class="line">    print(<span class="string">"type = "</span>, cls_prop)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">"cls prop = "</span>, cls_prop</span><br><span class="line">    <span class="keyword">return</span> cls_prop</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    img = cv2.imread(<span class="string">"/home/meringue/Documents/traffic_sign_detection/svm_hog_classification/sign_89.jpg"</span>)</span><br><span class="line">    rows, cols, _ = img.shape</span><br><span class="line">    img_bin = preprocess_img(img,<span class="keyword">False</span>)</span><br><span class="line">    cv2.imshow(<span class="string">"bin image"</span>, img_bin)</span><br><span class="line">    cv2.imwrite(<span class="string">"bin_image.jpg"</span>, img_bin)</span><br><span class="line">    min_area = img_bin.shape[<span class="number">0</span>]*img.shape[<span class="number">1</span>]/(<span class="number">25</span>*<span class="number">25</span>)</span><br><span class="line">    rects = contour_detect(img_bin, min_area=min_area)</span><br><span class="line">    img_rects = draw_rects_on_img(img, rects)</span><br><span class="line">    cv2.imshow(<span class="string">"image with rects"</span>, img_rects)</span><br><span class="line">    cv2.imwrite(<span class="string">"image_rects.jpg"</span>, img_rects)</span><br><span class="line"></span><br><span class="line">    clf = joblib.load(<span class="string">"./svm_model.pkl"</span>)</span><br><span class="line"></span><br><span class="line">    img_bbx = img.copy()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> rect <span class="keyword">in</span> rects:</span><br><span class="line">        xc = int(rect[<span class="number">0</span>] + rect[<span class="number">2</span>]/<span class="number">2</span>)</span><br><span class="line">        yc = int(rect[<span class="number">1</span>] + rect[<span class="number">3</span>]/<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">        size = max(rect[<span class="number">2</span>], rect[<span class="number">3</span>])</span><br><span class="line">        x1 = max(<span class="number">0</span>, int(xc-size/<span class="number">2</span>))</span><br><span class="line">        y1 = max(<span class="number">0</span>, int(yc-size/<span class="number">2</span>))</span><br><span class="line">        x2 = min(cols, int(xc+size/<span class="number">2</span>))</span><br><span class="line">        y2 = min(rows, int(yc+size/<span class="number">2</span>))</span><br><span class="line">        proposal = img[y1:y2, x1:x2]</span><br><span class="line">        cls_prop = hog_extra_and_svm_class(proposal, clf)</span><br><span class="line">        cls_prop = np.round(cls_prop, <span class="number">2</span>)[<span class="number">0</span>]</span><br><span class="line">        cls_num = np.argmax(cls_prop)</span><br><span class="line">        cls_name = cls_names[cls_num]</span><br><span class="line">        prop = cls_prop[cls_num]</span><br><span class="line">        <span class="keyword">if</span> cls_name <span class="keyword">is</span> <span class="keyword">not</span> <span class="string">"background"</span>:</span><br><span class="line">            cv2.rectangle(img_bbx,(rect[<span class="number">0</span>],rect[<span class="number">1</span>]), (rect[<span class="number">0</span>]+rect[<span class="number">2</span>],rect[<span class="number">1</span>]+rect[<span class="number">3</span>]), (<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>), <span class="number">2</span>)</span><br><span class="line">            cv2.putText(img_bbx, cls_name+str(prop), (rect[<span class="number">0</span>], rect[<span class="number">1</span>]), <span class="number">1</span>, <span class="number">1.5</span>, (<span class="number">0</span>,<span class="number">0</span>,<span class="number">255</span>),<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">    cv2.imshow(<span class="string">"detect result"</span>, img_bbx)</span><br><span class="line">    cv2.imwrite(<span class="string">"detect_result.jpg"</span>, img_bbx)</span><br><span class="line">    cv2.waitKey(<span class="number">0</span>)</span><br></pre></td></tr></table></figure>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img4.png" alt="test result1"></p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img6.png" alt="test result2"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img4.png" alt="test result1"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img6.png" alt="test result2"></p>
 <p>上图中从左到右分别为阈值化后的图、候选框提取结果和最终检测检测结果（类别名+置信度），最终各个类别标志的准确率和召回率（IOU的阈值设为0.5）如下（计算的代码在我的github里可以找到，就不放在博客里了。）：</p>
 <table><tr><th>标志</th><th>直行</th><th>左转</th><th>右转</th><th>禁止鸣笛</th><th>人行横道</th><th>禁止通行</th></tr><tr><th>准确率</th><th>41.6%</th><th>45.8%</th><th>43.5%</th><th>45.3%</th><th>75.6%</th><th>45.7%</th></tr><tr><th>召回率</th><th>37.1%</th><th>39.8%</th><th>43.5%</th><th>48.3%</th><th>50.8%</th><th>57.1%</th></tr></table>
 
 <p>用于视频中的实时检测视频示例：</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\out_video2.gif" alt="video_gif"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\out_video2.gif" alt="video_gif"></p>
 <p>对SVM输出的概率值依次设置0.1、0.2 …0.9的阈值，得到的平均准确率和召回率变化趋势如下：</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\Figure_1.png" alt="pre_rec"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\Figure_1.png" alt="pre_rec"></p>
 <p>从数据上可以发现，总体的检测结果还是很不理想的。我们通过观察准确率和召回率的变化曲线发现，当置信度的阈值不断变大时，平均准确率不断上升，而召回率比较平缓（阈值大于0.7的时候略微下降）。进一步观察检测的图片发现，候选区域的提取是我们检测模型性能的瓶颈，这主要体现在以下两点：</p>
 <p>（1）有很多标志所在的候选区域被漏检（详见Bad Cases Analysis），这直接导致最终的召回率很低。<br>（2）有些包含标志的候选区域虽然被找出来了，但是其中包含了大量的噪声，如出现相似颜色的背景时，标志只占候选区域的一小部分，或者多个标志相邻时被框在了一起，这将直接影响分类的结果，降低准确率。</p>
 <p>而提高置信度时，大量的误检会被排除，而漏检情况几乎不受影响（候选区域的提取不受置信度阈值的影响），所以会明显提高准确率。</p>
 <h1 id="Bad-Cases-Analysis"><a href="#Bad-Cases-Analysis" class="headerlink" title="Bad Cases Analysis"></a>Bad Cases Analysis</h1><p>基于上面的检测结果，我把所有的检测矩形框在图像中画出来，并一一查看，发现误检和漏检问题主要体现在一下几个方面：</p>
 <p><strong>光线不均匀。</strong>由于图片都是在不同的时刻从户外进行采集的，测试集中的部分交通标志存在在强光和弱光的情况，这将直接对候选区域的提取造成困难。虽然我们在颜色空间上已经选用了对光线鲁棒性较好的HSV空间，但仍然无法避免光照过于恶劣的情况。不过我发现，光照对分类的影响很小，这是因为我们使用的HOG特征里有标准化的操作，使得同一个候选框在不同的光照下HOG特征保持不变。我实验的时候考虑过适当放宽蓝色和红色的阈值范围，但是这样做也会产生更多的背景框，影响检测速度。</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img7.png" alt="light"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img7.png" alt="light"></p>
 <p><strong>复杂或相似的背景干扰。</strong>我们的阈值化是基于颜色信息的，所以当标志物周围有颜色相近的背景时（如楼房、蓝天等），会很大程度上对候选框的提取造成影响。如下图中，由于左边的两个标志周围有颜色接近红色的小区的干扰，所以在阈值化时周围包含了大量的噪声，对SVM的分类影响很大。可以考虑加入轻微的腐蚀膨胀来弱化噪声的影响，但对于一些较小甚至不完全封闭的标志，会破坏原有的结构，造成漏检。</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img8.png" alt="background"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img8.png" alt="background"></p>
 <p><strong>局部遮挡或缺失。</strong>这两种情况相当于在特征提取过程中加入了噪声，对候选框提取的影响较小，它主要影响分类器的识别。可以在SVM训练集中加入部分包含遮挡的标志来提高鲁棒性。下图中左边虽然还是检测除了人行横道标志，但置信度很低。</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img9.png" alt="cover"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img9.png" alt="cover"></p>
 <p><strong>多个标志相邻</strong><br>这种情况在实际场景中非常常见，当多个标志连在一起的时候，凸包检测的过程中会把几个标志当成一个整体，从而导致漏检和误检。</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img10.png" alt="neighbor"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img10.png" alt="neighbor"></p>
 <p><strong>相似标志或背景的干扰</strong><br>我们在检测的时候只选取了6类标志，所以其他标志都相当于是背景。但是，在检测的时候有些标志和我们的6类标志很像，提高了分类的难度，从而造成误检。</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img11.png" alt="similar"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img11.png" alt="similar"></p>
 <p><strong>小目标检测</strong><br>当目标较小的时候，我们在HOG特征提取之前先进行了resize操作，但resize后的图像往往不能准确的反映小目标的HOG特征（分辨率过低），导致提取的特征很粗糙，不利于分类。</p>
-<p><img src="/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img12.png" alt="tiny"></p>
+<p><img src="/hexo_blog/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/\img12.png" alt="tiny"></p>
 <h1 id="改进思路"><a href="#改进思路" class="headerlink" title="改进思路"></a>改进思路</h1><p>整个检测框架的瓶颈是候选区域的选取。由于我只使用了颜色信息进行候选框提取，因此存在大量的噪声，很容易导致候选区域提取阶段漏掉部分标志。所以比较有效的一个改进思路是优化候选框的提取过程，比如加入一些形状的检测（平行四边形、椭圆等），但由于形状检测的计算量比较大，可能会降低整体的检测速度。当应用视频中的实时检测时，速度可能会跟不上。</p>
 <p>另外，虽然这边SVM的分类效果还可以接受，但这仅仅是7（6+1）个类别，当样本类别很多时，需要更多的数据和更强大的分类器（如卷积神经网络）来降低误检率。</p>
 <p>最后再提下一个暴力的改进思路是直接扔掉候选区域提取的过程，改用像YOLO网络这样端到端的检测框架。总之，思路很多，感兴趣的朋友可以自己去尝试。</p>
@@ -444,7 +444,7 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/07/23/matlab-gui-gpa/" rel="prev" title="用MATLAB GUI做一个简单的绩点计算界面">
+              <a href="/hexo_blog/2018/07/23/matlab-gui-gpa/" rel="prev" title="用MATLAB GUI做一个简单的绩点计算界面">
                 用MATLAB GUI做一个简单的绩点计算界面 <i class="fa fa-chevron-right"></i>
               </a>
             
@@ -513,7 +513,7 @@
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
               <img class="site-author-image" itemprop="image"
-                src="/images/emoji.jpg"
+                src="/hexo_blog/images/emoji.jpg"
                 alt="Meringue" />
             
               <p class="site-author-name" itemprop="name">Meringue</p>
@@ -525,7 +525,7 @@
             
               <div class="site-state-item site-state-posts">
               
-                <a href="/archives/">
+                <a href="/hexo_blog/archives/">
               
                   <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
@@ -537,7 +537,7 @@
               
               
               <div class="site-state-item site-state-categories">
-                <a href="/categories/index.html">
+                <a href="/hexo_blog/categories/index.html">
                   <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
@@ -548,7 +548,7 @@
               
               
               <div class="site-state-item site-state-tags">
-                <a href="/tags/index.html">
+                <a href="/hexo_blog/tags/index.html">
                   <span class="site-state-item-count">1</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
@@ -696,64 +696,64 @@
 
   
   
-    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+    <script type="text/javascript" src="/hexo_blog/lib/jquery/index.js?v=2.1.3"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+    <script type="text/javascript" src="/hexo_blog/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+    <script type="text/javascript" src="/hexo_blog/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/hexo_blog/lib/velocity/velocity.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+    <script type="text/javascript" src="/hexo_blog/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
   
 
   
   
-    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <script type="text/javascript" src="/hexo_blog/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
   
-
-
-  
-
-
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
-
-
-
-  
-  
-
-
-  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
-
-  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
-
-
-
-  
-  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
-
 
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+  <script type="text/javascript" src="/hexo_blog/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/hexo_blog/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/hexo_blog/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/hexo_blog/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/hexo_blog/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/hexo_blog/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/hexo_blog/js/src/bootstrap.js?v=5.1.4"></script>
 
 
 
