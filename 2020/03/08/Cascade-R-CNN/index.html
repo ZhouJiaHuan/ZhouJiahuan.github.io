@@ -79,22 +79,22 @@
 
 
 
-<meta name="description" content="typora-root-url: images摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列">
+<meta name="description" content="摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的">
 <meta name="keywords" content="计算机视觉,目标检测">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Cascade R-CNN">
 <meta property="og:url" content="http://yoursite.com/2020/03/08/Cascade-R-CNN/index.html">
 <meta property="og:site_name" content="Meringue&#39;s Blog">
-<meta property="og:description" content="typora-root-url: images摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列">
+<meta property="og:description" content="摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/03/08/Cascade-R-CNN//1571322842768.png">
 <meta property="og:image" content="http://yoursite.com/2020/03/08/Cascade-R-CNN/1571322928861.png">
 <meta property="og:image" content="http://yoursite.com/2020/03/08/Cascade-R-CNN/1571461487746.png">
 <meta property="og:image" content="http://yoursite.com/2020/03/08/Cascade-R-CNN/1571465388155.png">
-<meta property="og:updated_time" content="2020-03-08T05:28:06.053Z">
+<meta property="og:updated_time" content="2020-03-08T05:35:42.708Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cascade R-CNN">
-<meta name="twitter:description" content="typora-root-url: images摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列">
+<meta name="twitter:description" content="摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的">
 <meta name="twitter:image" content="http://yoursite.com/2020/03/08/Cascade-R-CNN//1571322842768.png">
 
 
@@ -347,8 +347,7 @@
       
 
       
-        <hr>
-<h2 id="typora-root-url-images"><a href="#typora-root-url-images" class="headerlink" title="typora-root-url: images"></a>typora-root-url: images</h2><h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的假正样本有更好的辨别能力。检测模型逐级训练，前一级的模型可以为下一级质量更好的模型提供一个较好的分布。这种渐进的重采样方式保证了所有的模型都有大致相同的正样本比例，缓解了过拟合问题。在推理阶段采用相同的处理过程，因此在训练和推理过程中模型假设和每一阶段的模型质量都更加匹配。在COCO数据集上，Cascade R-CNN超过了当前所有的单模型。实验结果也表明，Cascade R-CNNk可以广泛用于目标检测框架，并相对于基础模型都有稳定的提升。源码将开源在<a href="https://github.com/zhaoweicai/cascade-rcnn" target="_blank" rel="noopener">https://github.com/zhaoweicai/cascade-rcnn</a>.</p>
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的假正样本有更好的辨别能力。检测模型逐级训练，前一级的模型可以为下一级质量更好的模型提供一个较好的分布。这种渐进的重采样方式保证了所有的模型都有大致相同的正样本比例，缓解了过拟合问题。在推理阶段采用相同的处理过程，因此在训练和推理过程中模型假设和每一阶段的模型质量都更加匹配。在COCO数据集上，Cascade R-CNN超过了当前所有的单模型。实验结果也表明，Cascade R-CNNk可以广泛用于目标检测框架，并相对于基础模型都有稳定的提升。源码将开源在<a href="https://github.com/zhaoweicai/cascade-rcnn" target="_blank" rel="noopener">https://github.com/zhaoweicai/cascade-rcnn</a>.</p>
 <h1 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h1><p>IOU阈值的选取对训练和推理都有很重要的影响。对比下面的两个图，当IOU阈值取值较低时，如0.5，在训练阶段，会产生大量包含噪声的正样本，这些正样本与ground truth的IOU比较低，不利于模型的训练，而当提高IOU阈值时，如0.7，虽然可以规避大量包含噪声的正样本，但是又带来另外一个问题：正样本大大减少，负样本（即北背景）在训练集中占主导作用，很容易导致模型过拟合（模型将所有的样本都预测为负样本）。</p>
 <p><img src="/2020/03/08/Cascade-R-CNN/\1571322842768.png" alt="1571322842768"></p>
 <p>还有一个问题就是，在推理阶段，模型对于与IOU阈值相近的ROI预测结果较好，而对于其他的ROI预测效果一般。也就是推理阶段与训练阶段IOU的不匹配。论文中给出了更直观的实验对比。</p>
@@ -571,7 +570,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#typora-root-url-images"><span class="nav-number">1.</span> <span class="nav-text">typora-root-url: images</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number"></span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动机"><span class="nav-number"></span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主要工作"><span class="nav-number"></span> <span class="nav-text">主要工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cascade-R-CNN结构"><span class="nav-number">1.</span> <span class="nav-text">Cascade R-CNN结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型实现细节"><span class="nav-number">2.</span> <span class="nav-text">模型实现细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验对比"><span class="nav-number">3.</span> <span class="nav-text">实验对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number"></span> <span class="nav-text">总结</span></a></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动机"><span class="nav-number">2.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主要工作"><span class="nav-number">3.</span> <span class="nav-text">主要工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cascade-R-CNN结构"><span class="nav-number">3.1.</span> <span class="nav-text">Cascade R-CNN结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型实现细节"><span class="nav-number">3.2.</span> <span class="nav-text">模型实现细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验对比"><span class="nav-number">3.3.</span> <span class="nav-text">实验对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
