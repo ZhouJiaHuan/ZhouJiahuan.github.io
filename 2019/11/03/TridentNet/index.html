@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="计算机视觉,目标检测," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="摘要尺度变化是目标检测领域中的重要挑战之一。在本文工作中，我们做实验研究了目标检测中感受野对于尺度变化的影响。基于这些实验结论，我们提出了一种新颖的三叉戟网络（TridentNet），旨在生成特定大小的特征图。我们构建了一个多支路并行的网络结构，每个分支共享参数但感受野不同。之后对于每一条分支，我们将目标采样到合适的尺寸用于训练。我们还提出了一个快速版的TridentNet（置用一条支路进行推理）">
+<meta name="keywords" content="计算机视觉,目标检测">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TridentNet">
+<meta property="og:url" content="http://yoursite.com/2019/11/03/TridentNet/index.html">
+<meta property="og:site_name" content="Meringue&#39;s Blog">
+<meta property="og:description" content="摘要尺度变化是目标检测领域中的重要挑战之一。在本文工作中，我们做实验研究了目标检测中感受野对于尺度变化的影响。基于这些实验结论，我们提出了一种新颖的三叉戟网络（TridentNet），旨在生成特定大小的特征图。我们构建了一个多支路并行的网络结构，每个分支共享参数但感受野不同。之后对于每一条分支，我们将目标采样到合适的尺寸用于训练。我们还提出了一个快速版的TridentNet（置用一条支路进行推理）">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572665907957.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572677801867.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572682147235.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572704509704.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572706097101.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572791227108.png">
+<meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572791959160.png">
+<meta property="og:updated_time" content="2020-03-08T05:55:55.038Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TridentNet">
+<meta name="twitter:description" content="摘要尺度变化是目标检测领域中的重要挑战之一。在本文工作中，我们做实验研究了目标检测中感受野对于尺度变化的影响。基于这些实验结论，我们提出了一种新颖的三叉戟网络（TridentNet），旨在生成特定大小的特征图。我们构建了一个多支路并行的网络结构，每个分支共享参数但感受野不同。之后对于每一条分支，我们将目标采样到合适的尺寸用于训练。我们还提出了一个快速版的TridentNet（置用一条支路进行推理）">
+<meta name="twitter:image" content="http://yoursite.com/2019/11/03/TridentNet/1572665907957.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/11/03/TridentNet/"/>
+
+
+
+
+
+  <title>TridentNet | Meringue's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Meringue's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Cease to struggle and you cease to live</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/03/TridentNet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Meringue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/emoji.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Meringue's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">TridentNet</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-11-03T13:49:08+08:00">
+                2019-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">论文笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>尺度变化是目标检测领域中的重要挑战之一。在本文工作中，我们做实验研究了目标检测中感受野对于尺度变化的影响。基于这些实验结论，我们提出了一种新颖的三叉戟网络（TridentNet），<strong>旨在生成特定大小的特征图</strong>。我们构建了一个多支路并行的网络结构，每个分支共享参数但感受野不同。之后对于每一条分支，我们将目标采样到合适的尺寸用于训练。我们还提出了一个快速版的TridentNet（置用一条支路进行推理），这个网络在不需要额外参数和计算成本的前提下可以显著提高典型检测框架的性能。在COCO数据集上，我们提出的基于ResNet-101主干网络的TridentNet可以达到单模型48.4mAP最好成绩。代码开源在：<a href="https://git.io/fj5vR。" target="_blank" rel="noopener">https://git.io/fj5vR。</a></p>
+<h1 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h1><ul>
+<li>目标检测中的对象大小变化范围很大，会一定程度上影响检测性能。尤其是那些太大或太小的目标，对检测性能的影响很大。</li>
+<li>图像金字塔（下图a）和特征金字塔(（下图b）是处理多尺度问题的两个有效思路。图像金字塔通过在训练和推理阶段使用不同大小的图片进行输入，可以提高检测精度，但是也带来了推理时间的成倍增加，因此在实际应用中并不合适；特征金字塔（如SSD、FPN）利用不同深度的特征图信息进行预测（SSD从当前层预测、FPN引入横向连接跨层融合特征信息预测），但由于FPN的融合的特征来源于不同的层，使用的参数不完全相同，因此不能完全作为图像金字塔的替代品（图像金字塔所有的图片经过相同的推理过程，使用的参数一致）</li>
+<li>图像金字塔和特征金字塔的主要思想基本一致，即对于不同大小的目标，模型的感受野应该也有所不同（大目标的感受野应该大一些，而小目标的感受野应该小一点）。不同的是，图像金字塔充分利用了模型的表达能力，所有大小的目标都通过一致的模型推理过程，但推理时间成倍增加；特征金字塔融合了不同深度的特征，导致了特征的不一致性，可能会降低模型训练效率，同时增加过拟合的风险（？？？）。</li>
+</ul>
+<p><img src="/2019/11/03/TridentNet/1572665907957.png" alt="1572665907957"></p>
+<h1 id="主要工作"><a href="#主要工作" class="headerlink" title="主要工作"></a>主要工作</h1><h2 id="感受野对检测的影响"><a href="#感受野对检测的影响" class="headerlink" title="感受野对检测的影响"></a>感受野对检测的影响</h2><p>为了更直观地量化目标检测中感受野变化对检测结果的影响，论文首先设计了一组实验。实验基于COCO数据集，并采用基于ResNet-C4的Faster R-CNN。然后将主干网络中的部分卷积过程用膨胀卷积来代替，使用不同大小的膨胀率来控制感受野的大小。论文的实验结果如下：</p>
+<p><img src="/2019/11/03/TridentNet/1572677801867.png" alt="1572677801867"></p>
+<p>从上表结果中可以看出，不论是ResNet-50还是ResNet-101，在膨胀率从1开始逐步增加到3时，模型对小目标的AP值逐渐下降，对大目标的AP值逐步提高。换句话说，感受野小的模型对小目标的检测性能较好，而感受野大的模型对大目标的检测性能较好。这也正是论文中提出TridentNet的主要动机。</p>
+<h2 id="TridentNet框架"><a href="#TridentNet框架" class="headerlink" title="TridentNet框架"></a>TridentNet框架</h2><h2 id="模型设计"><a href="#模型设计" class="headerlink" title="模型设计"></a>模型设计</h2><p><img src="/2019/11/03/TridentNet/1572682147235.png" alt="1572682147235"></p>
+<p>TridentNet结构最核心的思想是<strong>模型感受野大小需要和目标大小相互匹配</strong>。而为了达到这一目的，最直观的想法是让特定感受野的模型只负责和它相匹配的目标的训练。但是如何让单个模型有不同的感受野呢？TridentNet的策略就是分支网络+膨胀卷积。</p>
+<p>上图中，图片进入网络后，在进入主干网络的若干层后，分3条支路，每条支路都结构相同，但膨胀卷积的膨胀率不同（例如对于ResNet主干网络，将最后一个stage的卷积换成膨胀卷积，然后分三条支路），输出特征图的每个位置的感受野也不同，最后将3条支路的所有输出结果进行非极大值抑制，得到最终结果。</p>
+<p>到这里可能会有一个疑问：分三条支路，那训练的参数量不会成倍增加吗？TridentNet其实也考虑到了这个问题，并且给出了解决思路：分支权重共享。如下图中，多条支路中，所有的结构完全相同，不同的只是膨胀卷积的膨胀率不同，所以参数共享是完全可行的。更具体地说，候选框不论进入那条支路，更新的参数都会共享到其他所有支路上。这样的好处在于，对于某一个输入，网络使用最合适的膨胀率的支路进行前向传播和参数更新。</p>
+<p><img src="/2019/11/03/TridentNet/1572704509704.png" alt="1572704509704"></p>
+<p>那现在又引出一个问题，如何让网络针对不同大小的候选框选择特定的膨胀率的支路呢？TridentNet给出的方法给每条支路设定一个大小阈值，然后根据输入候选框的大小，分配到相应的支路中，即：</p>
+<p><img src="/2019/11/03/TridentNet/1572706097101.png" alt="1572706097101"></p>
+<h2 id="模型推理"><a href="#模型推理" class="headerlink" title="模型推理"></a>模型推理</h2><p>对于模型推理，最直观的思路是使用所有支路的预测结果，最后在一起进行非极大值抑制，但这样做会显著增加推理时间。因此，论文中也给出了一个快速推理的方法，即只是用其中的一条支路进行预测。例如对于3条支路的TridentNet，只使用中间那条支路进行预测，因为中间支路膨胀率比较适中，可以兼顾较大和较小的目标。而论文在实验中也发现，只使用一条支路进行预测也并没有牺牲太多的检测精度。</p>
+<h1 id="实验"><a href="#实验" class="headerlink" title="实验"></a>实验</h1><h2 id="实验实现细节"><a href="#实验实现细节" class="headerlink" title="实验实现细节"></a>实验实现细节</h2><ul>
+<li>以Faster R-CNN为基础框架，并基于MXNet实现。</li>
+<li>模型输入图片短边会被Resize到800</li>
+<li>训练阶段采用随机水平翻转</li>
+<li>训练采用8块GPU，每块GPU2张图片</li>
+<li>初始学习率0.02，第8轮和第10轮依次衰减1/10</li>
+<li>每条支路在NMS前最多生成12000个候选框，NMS后最多保留500个候选框，并选取128个候选框用于训练</li>
+<li>采用三条支路，膨胀率依次为1，2，3，$\sqrt(wh)$ 的范围依次为[0,90]，[30, 160]，[90, ∞]</li>
+</ul>
+<h2 id="主要实验结果"><a href="#主要实验结果" class="headerlink" title="主要实验结果"></a>主要实验结果</h2><p>论文首先基于ResNet-101和ResNet-101-Deformable主干网络研究了TridentNet框架中几个重要的超参数的影响，如是否采用多分支、是否权重共享、是否按候选框大小分配分支等，结果如下：</p>
+<p><img src="/2019/11/03/TridentNet/1572791227108.png" alt="1572791227108"></p>
+<p>可以发现，在两种主干网络上，采用TridentNet中提出的几种策略对Baseline都起到了明显的提升效果。唯一不足的是，scale-aware策略在$AP_l$指标上略有牺牲，文中也指出这一点可能是由于按大小分配候选框会导致每条支路上有效的样本数量下降，导致过拟合。</p>
+<p>文中也比较了TridentNet和其他主流检测框架的性能，如下图：</p>
+<p><img src="/2019/11/03/TridentNet/1572791959160.png" alt="1572791959160"></p>
+<p>从上表中可以看出，采用ResNet-101-Deformable主干网络的TridentNet在COCO数据集上的表现是非常亮眼的，而如果在推理阶段再采用多尺度测试，性能又得到了明显提高。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>TridentNet的出发点是为了解决感受野大小和检测目标大小的不一致问题。大的目标需要大一点的感受野，而小目标的感受野不宜太大。为了解决这个问题，TridentNet采用多分支结构，每条分支采用不同膨胀率的膨胀卷积来实现不同的感受野。其实我觉得这种处理思想和Cascade R-CNN很像，都是为了保证模型和数据的”一致性”，只不过Cascade R-CNN针对IOU阈值，而TridentNet针对感受野。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机视觉/" rel="tag"># 计算机视觉</a>
+          
+            <a href="/tags/目标检测/" rel="tag"># 目标检测</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/10/22/Cascade-R-CNN/" rel="next" title="Cascade R-CNN">
+                <i class="fa fa-chevron-left"></i> Cascade R-CNN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/16/Libra-R-CNN/" rel="prev" title="Libra R-CNN">
+                Libra R-CNN <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/emoji.jpg"
+                alt="Meringue" />
+            
+              <p class="site-author-name" itemprop="name">Meringue</p>
+              <p class="site-description motion-element" itemprop="description">z_jiahuan@outlook.com</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ZhouJiaHuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/sinat_34474705" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动机"><span class="nav-number">2.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主要工作"><span class="nav-number">3.</span> <span class="nav-text">主要工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#感受野对检测的影响"><span class="nav-number">3.1.</span> <span class="nav-text">感受野对检测的影响</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#TridentNet框架"><span class="nav-number">3.2.</span> <span class="nav-text">TridentNet框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型设计"><span class="nav-number">3.3.</span> <span class="nav-text">模型设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型推理"><span class="nav-number">3.4.</span> <span class="nav-text">模型推理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验"><span class="nav-number">4.</span> <span class="nav-text">实验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#实验实现细节"><span class="nav-number">4.1.</span> <span class="nav-text">实验实现细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#主要实验结果"><span class="nav-number">4.2.</span> <span class="nav-text">主要实验结果</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Meringue</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="计算机视觉,目标检测," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="论文地址：https://arxiv.org/pdf/1904.02701.pdf 摘要相比于模型框架，模型的训练过程对于检测器是否成功也同样重要。在本文工作中，我们重新研究了标准的训练过程，发现检测的性能经常受限于模型训练过程中的不平衡。这种不平衡包括以下3个层面：采样层面、特征层面和目标层面。为了缓和着中国不平嗯带来的不利影响，我们提出了一种简单有效的面向目标检测中的不平衡学习的框架，即Lib">
+<meta name="keywords" content="计算机视觉,目标检测">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Libra R-CNN">
+<meta property="og:url" content="http://yoursite.com/2019/12/16/Libra-R-CNN/index.html">
+<meta property="og:site_name" content="Meringue&#39;s Blog">
+<meta property="og:description" content="论文地址：https://arxiv.org/pdf/1904.02701.pdf 摘要相比于模型框架，模型的训练过程对于检测器是否成功也同样重要。在本文工作中，我们重新研究了标准的训练过程，发现检测的性能经常受限于模型训练过程中的不平衡。这种不平衡包括以下3个层面：采样层面、特征层面和目标层面。为了缓和着中国不平嗯带来的不利影响，我们提出了一种简单有效的面向目标检测中的不平衡学习的框架，即Lib">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1573291261358.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1573299197714.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1574170974738.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575900433559.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/E:/OneDrive/Notes/论文笔记/Libra%20R-CNN.assets/1575900480543.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575900943010.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575900598363.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575901317663.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575901670971.png">
+<meta property="og:updated_time" content="2020-03-08T05:49:58.562Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Libra R-CNN">
+<meta name="twitter:description" content="论文地址：https://arxiv.org/pdf/1904.02701.pdf 摘要相比于模型框架，模型的训练过程对于检测器是否成功也同样重要。在本文工作中，我们重新研究了标准的训练过程，发现检测的性能经常受限于模型训练过程中的不平衡。这种不平衡包括以下3个层面：采样层面、特征层面和目标层面。为了缓和着中国不平嗯带来的不利影响，我们提出了一种简单有效的面向目标检测中的不平衡学习的框架，即Lib">
+<meta name="twitter:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1573291261358.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/12/16/Libra-R-CNN/"/>
+
+
+
+
+
+  <title>Libra R-CNN | Meringue's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Meringue's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Cease to struggle and you cease to live</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/16/Libra-R-CNN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Meringue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/emoji.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Meringue's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Libra R-CNN</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-16T13:42:55+08:00">
+                2019-12-16
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">论文笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><strong>论文地址：<a href="https://arxiv.org/pdf/1904.02701.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/1904.02701.pdf</a></strong></p>
+<h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>相比于模型框架，模型的训练过程对于检测器是否成功也同样重要。在本文工作中，我们重新研究了标准的训练过程，发现检测的性能经常受限于模型训练过程中的不平衡。这种不平衡包括以下3个层面：采样层面、特征层面和目标层面。为了缓和着中国不平嗯带来的不利影响，我们提出了一种简单有效的面向目标检测中的不平衡学习的框架，即Libra R-CNN,该框架有3个新颖的部分组成：平衡化IOU采样、平衡化特征金字塔和平衡话L1损失。这3个部分分别用于缓解采样层面、特征层面和目标层面的不平衡。受益于整体的平衡化设计，Libra R-CNN显著提高了检测性能，在不采用其他技巧的前提下，Libra R-CNN在COCO数据集上的表现比FPN Faster R-CNN和RetinaNet分别高了2.5%和2%的mAP。</p>
+<h1 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h1><p>典型的目标检测框架主要包含候选框提取、从候选框提取特征和预测（分类和边界框回归）3个步骤。也因此目标检测的性能受以下几点的影响较大：</p>
+<ul>
+<li>选择的候选框是否具有代表性（质量怎么样？是否包含了大部分的目标？）</li>
+<li>提取到的特征有没有得到充分的利用？</li>
+<li>针对所有的目标设计的损失函数是否是最优的？</li>
+</ul>
+<p>然而，经典的训练过程在在上述的三个方面有表现出严重的“不平衡”问题，具体表现为：</p>
+<ul>
+<li><strong>采样层面的不平衡。</strong>在目标检测训练过程中困难样本往往比简单样本有更大的价值，但在一张图片中，背景区域要远远大于存在目标的区域。在候选框提取阶段，往往都是通过随机采样的方式选择候选框参与训练，这就导致了每次采样的结果包含大部分简单样本（主要是背景）和少数的困难的样本（如下图a）。虽然现有的研究中已经有针对这一问题的研究，如困难样本挖掘技术和Focal Loss,但困难样本挖掘对噪声比较敏感，而Focal Loss主要针对一阶段检测模型（二阶段模型中，大部分的简单样本已经被候选区域提取网络过滤掉，且在训练阶段也严格控制了正负样本的比例，如1：3）</li>
+<li><strong>特征层面的不平衡。</strong>在深层的卷积网络中，高层的特征语义信息更丰富，而浅层的特征更加精细。因此，一个自然而然的想法就是融合深层和浅层的特征，从而优势互补。但同时也带来一个问题：怎样融合的效果才更合理？在现有的研究中，以特征金字塔网络为代表的做法是融合相邻的不同分辨率特征图。而本文作者也指出：特征融合时应该平等对待不同分辨率的特征(如下图b)。特征金字塔的处理方式只考虑了相邻分辨率的特征，导致不相邻的语音特征在信息传播的过程中会被逐渐削弱。</li>
+<li><strong>目标层面的不平衡。</strong>目标检测包含了分类任务和定位任务，因此也对应着不同的损失函数，在训练过程中，如果不能很好的权衡两类损失，很有可能导致训练被某一个任务主导，导致整体的检测性能下降(如下图c)。这一点和在候选框选取过程中很像，例如在候选框采样时，困难样本产生的梯度可能会远高于简单样本产生的梯度，甚至当梯度过大时，导致回归的Loss波动太大，直接导致模型发散。</li>
+</ul>
+<p><img src="/2019/12/16/Libra-R-CNN/1573291261358.png" alt="1573291261358"></p>
+<h1 id="主要工作"><a href="#主要工作" class="headerlink" title="主要工作"></a>主要工作</h1><p>论文的主要工作也是围绕上面提到的三个层面的不平衡展开，具体如下。</p>
+<h2 id="IOU平衡化采样"><a href="#IOU平衡化采样" class="headerlink" title="IOU平衡化采样"></a>IOU平衡化采样</h2><p>论文在采样上的思想来源于对目标检测中一个问题的思考，即：候选框的的难易程度是否和其于实际标注框的重叠程度正相关？换句话说，是不是候选框和标注框的IOU越低，训练难度越大？为了论文中首先做了随机采样实验，并观察IOU分布,如下图：</p>
+<p><img src="/2019/12/16/Libra-R-CNN/1573299197714.png" alt="1573299197714"></p>
+<p>文中指出，超过60%的困难背景样本（一般IOU较高的背景样本在分类的时候比较困难）的IOU高于0.05，而通过随机采样得到的训练样本中，IOU高于0.05的样本只占30%。也就是说，大部分的困难背景样本被混到了多数简单样本中了。</p>
+<p>为此，论文提出了分层采样策略，假设要从$M$个候选框中选取$N$个负样本，那么每个负样本被选到的概率$p=\frac{N}{M}$。IOU平衡化采样的做法是首先根据IOU将所有的样本划分到$K$个的区间中，每个区间对应的候选框数量记作$M_k$，然后从每个区间中选择$\frac{N}{K}$个负样本。这样的好处在于，在选取困难负样本的时候，每个不同IOU区间的样本都会被照顾到，避免了随机采样得到的样本中大多数候选框的IOU都低于0.05的情况（IOU低于0.05的大多数为简单负样本），从而一定程度上增加了困难负样本的数量。</p>
+<p>上面的分层采样是针对困难的负样本，理论上可以通过相同的采样方式对来选取正样本来保证困难正样本的数量。然而，在当前基于候选框的二阶段模型中，候选框中正样本数量相比于负样本往往较少。因此，论文采用了一种替代方案，对于一张图片中的每个标注框，都随机选取若干个正样本。（相当于对于图片中中的标注框，不论是困难还是简单的标注框，都会生成相同数量的候选框，从而保证困难正样本的数量）</p>
+<h2 id="平衡化特征金字塔"><a href="#平衡化特征金字塔" class="headerlink" title="平衡化特征金字塔"></a>平衡化特征金字塔</h2><p>平衡化特征金字塔的主要思想是采用多级融合得到的特征图来增强每一级的特征图的表达能力。在实现上包含4个步骤：</p>
+<ul>
+<li>重新调整特征图大小</li>
+<li>整合特征图信息</li>
+<li>改善特征图信息</li>
+<li>特征图增强</li>
+</ul>
+<p><img src="/2019/12/16/Libra-R-CNN/1574170974738.png" alt="1574170974738"></p>
+<p>在用卷积神经网络提取图片特征时，不同深度的特征图按大小分成不同的层级，越浅层的特征图越大，越深层的特征图越小。为了增强特征图的表达能力，在目标检测中常把不同层级的特征图融合在一起（典型的方式如特征金字塔融合相邻的特征信息），Libra R-CNN的做法相对于是对于特征金字塔的延伸，利用多个层级的特征图信息来加强每一层级特征图的表达能力。具体过程如上图，首先对于几个不同层级的特征图$C_2, C_3, C_4, C_5$,都resize到一个中间大小（如$C_4$）,对于比$C_4$小的$C_5$，采用插值的方式调整大小，对于比$C_4$大的$C_2, C_3$，采用最大池化的方式调整。之后再求4个层级的特征图的均值得到综合的特征图信息。最后再把得到的特征图均值以插值/最大池化的方式融合到各个层级的特征图上，从而实现多层级的特征融合。</p>
+<h2 id="平衡化L1损失"><a href="#平衡化L1损失" class="headerlink" title="平衡化L1损失"></a>平衡化L1损失</h2><p>目标检测损失中包含分类损失和位置损失。平衡两类损失，最普遍的做法是给位置损失加一个权重。但这种做法会有一个潜在的问题：对于训练中的少数困难样本，预测的结果和实际的位置往往偏差较大，此时权重会将大的损失放大，从而产生更大的梯度信息，严重时可能会破坏模型的收敛过程，同时弱化多数简单样本产生的梯度信息。因此，为了平衡不同难度的样本带来的位置损失，论文基于smooth L1损失，提出了balanced L1损失，其对应的损失函数和梯度表达式如下：</p>
+<p><img src="/2019/12/16/Libra-R-CNN/1575900433559.png" alt="1575900433559"></p>
+<p><img src="/2019/12/16/Libra-R-CNN/E:/OneDrive\Notes\论文笔记\Libra R-CNN.assets\1575900480543.png" alt="1575900480543"></p>
+<p>其中，几个参数项满足以下约束：</p>
+<p><img src="/2019/12/16/Libra-R-CNN/1575900943010.png" alt="1575900943010"></p>
+<p>对应的曲线如下：</p>
+<p><img src="/2019/12/16/Libra-R-CNN/1575900598363.png" alt="1575900598363"></p>
+<p>可以看出，相比于smooth L1损失，balanced L1损失在取不同的$\alpha$ 值下对简单样本产生的梯度有不同的增强效果，从而平衡了简单样本和困难样本产生的位置损失。</p>
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><p><img src="/2019/12/16/Libra-R-CNN/1575901317663.png" alt="1575901317663"></p>
+<p>可以看出，Libra中的平衡化机制，不论用于一阶段模型（RetinaNet）和二阶段模型（Faster R-CNN）,都带来了2%mAP左右的性能提升。</p>
+<p>而在下表中的消融实验中也可以看出，Faster R-CNN中的3种平衡化策略在COCO数据集上都带来了约1%的mAP提升。</p>
+<p><img src="/2019/12/16/Libra-R-CNN/1575901670971.png" alt="1575901670971"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机视觉/" rel="tag"># 计算机视觉</a>
+          
+            <a href="/tags/目标检测/" rel="tag"># 目标检测</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/03/TridentNet/" rel="next" title="TridentNet">
+                <i class="fa fa-chevron-left"></i> TridentNet
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/emoji.jpg"
+                alt="Meringue" />
+            
+              <p class="site-author-name" itemprop="name">Meringue</p>
+              <p class="site-description motion-element" itemprop="description">z_jiahuan@outlook.com</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ZhouJiaHuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/sinat_34474705" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动机"><span class="nav-number">2.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主要工作"><span class="nav-number">3.</span> <span class="nav-text">主要工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IOU平衡化采样"><span class="nav-number">3.1.</span> <span class="nav-text">IOU平衡化采样</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平衡化特征金字塔"><span class="nav-number">3.2.</span> <span class="nav-text">平衡化特征金字塔</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#平衡化L1损失"><span class="nav-number">3.3.</span> <span class="nav-text">平衡化L1损失</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验结果"><span class="nav-number">4.</span> <span class="nav-text">实验结果</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Meringue</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
