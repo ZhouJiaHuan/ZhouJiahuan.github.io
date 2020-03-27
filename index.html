@@ -345,9 +345,8 @@
       
         
           
-          [toc]
-一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。
-类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵
+          一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。
+类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息
           ...
           <!--noindex-->
           <div class="post-button text-center">
@@ -1566,6 +1565,28 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
 
   
 

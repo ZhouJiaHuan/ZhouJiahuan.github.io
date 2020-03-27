@@ -79,19 +79,19 @@
 
 
 
-<meta name="description" content="[toc] 一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：$$f(x)=\l">
+<meta name="description" content="一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：$$f(x)=\left{\b">
 <meta name="keywords" content="计算机视觉,目标检测,损失函数">
 <meta property="og:type" content="article">
 <meta property="og:title" content="目标检测中的常用损失函数">
 <meta property="og:url" content="http://yoursite.com/2020/03/27/loss-functions-in-object-detection/index.html">
 <meta property="og:site_name" content="Meringue&#39;s Blog">
-<meta property="og:description" content="[toc] 一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：$$f(x)=\l">
+<meta property="og:description" content="一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：$$f(x)=\left{\b">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/03/27/loss-functions-in-object-detection/image-20200326140845852.png">
-<meta property="og:updated_time" content="2020-03-27T12:02:44.218Z">
+<meta property="og:updated_time" content="2020-03-27T12:11:37.581Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测中的常用损失函数">
-<meta name="twitter:description" content="[toc] 一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：$$f(x)=\l">
+<meta name="twitter:description" content="一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：$$f(x)=\left{\b">
 <meta name="twitter:image" content="http://yoursite.com/2020/03/27/loss-functions-in-object-detection/image-20200326140845852.png">
 
 
@@ -344,8 +344,7 @@
       
 
       
-        <p>[toc]</p>
-<p>一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。</p>
+        <p>一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。</p>
 <h1 id="类别损失"><a href="#类别损失" class="headerlink" title="类别损失"></a>类别损失</h1><h2 id="Cross-Entropy-Loss"><a href="#Cross-Entropy-Loss" class="headerlink" title="Cross Entropy Loss"></a>Cross Entropy Loss</h2><p>交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：<br>$$<br>f(x)=\left{<br>\begin{aligned}<br>-\int{p(x)\log p(x)dx}  &amp; &amp;{x连续}\<br>-\sum_{x}\log p(x) &amp; &amp;{x离散}<br>\end{aligned}<br>\right.<br>$$<br>当$X$分布的不确定性越大，对应的熵越大（对应$\log(x)$）积分面积），反之，熵越小。当把熵用于分类问题时，分类的结果越好（可以理解为预测为某一类的概率远高于其他类别的概率），不确定性越低，熵就越小；反之，分类的结果越差（可以理解为预测的各个类别的概率都比较高，没有明确的分界线），此时不确定性越强，熵就越高。</p>
 <p>针对以上分析，可以把熵用于分类问题的损失，根据分类的类别数量不同，可以分为二元交叉熵损失和多分类交叉熵损失。</p>
 <p>对于二分类问题（即0-1分类），即属于第1类的概率为$p$，属于第0类的概率为$1-p$。则二元交叉熵损失可表示为：<br>$$<br>L=\left{<br>\begin{aligned}<br>-\log (1-p)  &amp; &amp;{y=0}\<br>-\log (p) &amp; &amp;{y=1}<br>\end{aligned}<br>\right.<br>$$<br>也可以统一写成如下形式：<br>$$<br>L = -y<em> \log(p) - (1-y) </em> \log(1-p)<br>$$<br>可以理解为：当实际类别为1时，我们希望预测为类别1的概率高一点，此时$log(p)$的值越小，产生的损失越小；反之，我们希望预测为类别0的概率高一点，此时$log(1-p)$的值越小，产生的损失也越小。在实际应用中，二分类的类别概率通常采用sigmoid函数把结果映射到（0，1）之间。</p>
@@ -778,6 +777,8 @@
   
 
   
+  
+
 
   
 
