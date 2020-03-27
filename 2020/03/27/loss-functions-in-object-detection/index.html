@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="计算机视觉,目标检测,损失函数," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="[toc] 一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：$$f(x)=\l">
+<meta name="keywords" content="计算机视觉,目标检测,损失函数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="目标检测中的常用损失函数">
+<meta property="og:url" content="http://yoursite.com/2020/03/27/loss-functions-in-object-detection/index.html">
+<meta property="og:site_name" content="Meringue&#39;s Blog">
+<meta property="og:description" content="[toc] 一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：$$f(x)=\l">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2020/03/27/loss-functions-in-object-detection/image-20200326140845852.png">
+<meta property="og:updated_time" content="2020-03-27T12:02:44.218Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="目标检测中的常用损失函数">
+<meta name="twitter:description" content="[toc] 一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：$$f(x)=\l">
+<meta name="twitter:image" content="http://yoursite.com/2020/03/27/loss-functions-in-object-detection/image-20200326140845852.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/03/27/loss-functions-in-object-detection/"/>
+
+
+
+
+
+  <title>目标检测中的常用损失函数 | Meringue's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Meringue's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Cease to struggle and you cease to live</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/27/loss-functions-in-object-detection/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Meringue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/emoji.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Meringue's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">目标检测中的常用损失函数</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-27T19:58:07+08:00">
+                2020-03-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">论文笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>[toc]</p>
+<p>一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。</p>
+<h1 id="类别损失"><a href="#类别损失" class="headerlink" title="类别损失"></a>类别损失</h1><h2 id="Cross-Entropy-Loss"><a href="#Cross-Entropy-Loss" class="headerlink" title="Cross Entropy Loss"></a>Cross Entropy Loss</h2><p>交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：<br>$$<br>f(x)=\left{<br>\begin{aligned}<br>-\int{p(x)\log p(x)dx}  &amp; &amp;{x连续}\<br>-\sum_{x}\log p(x) &amp; &amp;{x离散}<br>\end{aligned}<br>\right.<br>$$<br>当$X$分布的不确定性越大，对应的熵越大（对应$\log(x)$）积分面积），反之，熵越小。当把熵用于分类问题时，分类的结果越好（可以理解为预测为某一类的概率远高于其他类别的概率），不确定性越低，熵就越小；反之，分类的结果越差（可以理解为预测的各个类别的概率都比较高，没有明确的分界线），此时不确定性越强，熵就越高。</p>
+<p>针对以上分析，可以把熵用于分类问题的损失，根据分类的类别数量不同，可以分为二元交叉熵损失和多分类交叉熵损失。</p>
+<p>对于二分类问题（即0-1分类），即属于第1类的概率为$p$，属于第0类的概率为$1-p$。则二元交叉熵损失可表示为：<br>$$<br>L=\left{<br>\begin{aligned}<br>-\log (1-p)  &amp; &amp;{y=0}\<br>-\log (p) &amp; &amp;{y=1}<br>\end{aligned}<br>\right.<br>$$<br>也可以统一写成如下形式：<br>$$<br>L = -y<em> \log(p) - (1-y) </em> \log(1-p)<br>$$<br>可以理解为：当实际类别为1时，我们希望预测为类别1的概率高一点，此时$log(p)$的值越小，产生的损失越小；反之，我们希望预测为类别0的概率高一点，此时$log(1-p)$的值越小，产生的损失也越小。在实际应用中，二分类的类别概率通常采用sigmoid函数把结果映射到（0，1）之间。</p>
+<p>对比二元交叉熵损失，可以推广到多分类交叉熵损失，定义如下：<br>$$<br>L(X_i, Y_i) = -\sum_{j=1}^{c}{y_{ij} * \log(p_{ij})}<br>$$<br>其中,$Y_i$是一个one-hot向量，并定义如下：<br>$$<br>y_{ij}=\left{<br>\begin{aligned}<br>1  &amp; &amp;{第i个样本属于类别j}\<br>0 &amp; &amp;{otherwise}<br>\end{aligned}<br>\right.<br>$$<br>$p_{ij}$表示第$i$个样本属于类别j的概率。在实际应用中通常采用SoftMax函数来得到样本属于每个类别的概率。</p>
+<h2 id="Focal-Loss"><a href="#Focal-Loss" class="headerlink" title="Focal Loss"></a>Focal Loss</h2><p>Focal Loss首次在目标检测框架RetinaNet中提出，RetinaNet可以参考</p>
+<p><a href="https://blog.csdn.net/sinat_34474705/article/details/102692382" target="_blank" rel="noopener">目标检测论文笔记：RetinaNet</a></p>
+<p>它是对典型的交叉信息熵损失函数的改进，主要用于样本分类的不平衡问题。为了统一正负样本的损失函数表达式，首先做如下定义：<br>$$<br>p_t=\left{<br>\begin{aligned}<br>p  &amp; &amp;{y =1}\<br>1-p &amp; &amp;{y=0}<br>\end{aligned}<br>\right.<br>$$<br>$p_t$<strong>在形式上就表示被预测为对应的正确类别的置信度</strong>。这样二分类交叉信息熵损失就可以重写成如下形式：<br>$$<br>CE(p,y) = CE(p_t) = -\log(p_t)<br>$$<br>为了平衡多数类和少数类的损失，一种常规的思想就是在损失项前乘上一个平衡系数$\alpha\in(0,1)$，当类别为正时，取$\alpha_t=\alpha$,当类别为负时，取$\alpha_t=1-\alpha$,这样得到的带有平衡系数的交叉信息熵损失定义如下：<br>$$<br>CE(p_t) = -\alpha \log(p_t)<br>$$<br>这样，根据训练样本中正负样本数量来选取$\alpha$的值，就可以达到平衡正负样本的作用。然而，这样做还不能对简单和困难样本区别对待，在目标检测中，既要平衡多数类（背景）和少数类（包含目标的前景），还要平衡简单样本和困难样本，而往往训练过程中往往遇到的问题就是大量简单的背景样本占据损失函数的主要部分。因此，还需要对上述带有平衡系数的交叉信息熵损失做进一步的改进。于是就有了Focal Loss，它定义如下：<br>$$<br>FL(p_t) = -(1-p_t)^{\gamma} \log(p_t)<br>$$<br>相比于上面的加了平衡系数$\alpha$的损失函数相比，Focal Loss有以下两点不同：</p>
+<ul>
+<li>固定的平衡系数$\alpha$替换成了可变的平衡系数$(1-p_t)$</li>
+<li>多了另外一个调节因子$\gamma$,且$\gamma\ge0$</li>
+</ul>
+<h1 id="位置损失"><a href="#位置损失" class="headerlink" title="位置损失"></a>位置损失</h1><h2 id="L1-Loss"><a href="#L1-Loss" class="headerlink" title="L1 Loss"></a>L1 Loss</h2><p>L1 loss即平均绝对误差（Mean Absolute Error, MAE），指模型预测值和真实值之间距离的平均值。<br>$$<br>MAE=\frac{\sum_{n=1}^n{|f(x_i)-y_i|}}{n}<br>$$<br>记$x=f(x_i-y_i)$，对于单个样本，L1 loss可表示为：<br>$$<br>MAE= |f(x_i)-y_i|=|x|<br>$$</p>
+<h2 id="L2-Loss"><a href="#L2-Loss" class="headerlink" title="L2 Loss"></a>L2 Loss</h2><p>L2 loss即均方误差损失（Mean Square Error, MSE），指预测值和真实值之差的平方的平均值。<br>$$<br>MSE=\frac{\sum_{n=1}^n{(f(x_i)-y_i)^2}}{n}<br>$$<br>对于单个样本，L2 loss可表示为：<br>$$<br>MSE = (f(x_i)-y_i)^2=x^2<br>$$</p>
+<h2 id="Smooth-L1-Loss"><a href="#Smooth-L1-Loss" class="headerlink" title="Smooth L1 Loss"></a>Smooth L1 Loss</h2><p>Smooth L1 loss是基于L1 loss修改得到，对于单个样本，记$x$为预测值和真实值的差值，则对应的Smooth L1 loss可表示为：<br>$$<br>f(x)=\left{<br>\begin{aligned}<br>0.5x^2  &amp; &amp;{if|x|&lt;1}\<br>|x|-0.5 &amp; &amp;{otherwise}<br>\end{aligned}<br>\right.<br>$$</p>
+<h2 id="IoU-Loss"><a href="#IoU-Loss" class="headerlink" title="IoU Loss"></a>IoU Loss</h2><p>IoU类的损失函数都是基于预测框和标注框之间的IoU（交并比），记预测框为$P$，标注框为$G$，则对应的IoU可表示为：<br>$$<br>IoU = \frac{P \cap G}{P \cup G}<br>$$<br>即两个框的交集和并集的比值。IoU loss定义为：<br>$$<br>L_I = 1 - IoU<br>$$</p>
+<h2 id="GIoU-Loss"><a href="#GIoU-Loss" class="headerlink" title="GIoU Loss"></a>GIoU Loss</h2><p>IoU反映了两个框的重叠程度，在两个框不重叠时，IoU衡等于0，此时IoU loss恒等于1。而在目标检测的边界框回归中，这显然是不合适的。因此，GIoU loss在IoU loss的基础上考虑了两个框没有重叠区域时产生的损失。具体定义如下：<br>$$<br>L_G = 1 - IoU + R(P,G)= 1 - IoU + \frac{|C-P \cup G|}{|C|}<br>$$<br>其中，C表示两个框的最小包围矩形框，$R(P,G)$是惩罚项。从公式可以看出，当两个框没有重叠区域时，IoU为0，但$R$依然会产生损失。极限情况下，当两个框距离无穷远时，$R \rightarrow1$</p>
+<h2 id="DIoU-Loss"><a href="#DIoU-Loss" class="headerlink" title="DIoU Loss"></a>DIoU Loss</h2><p>IoU loss和GIoU loss都只考虑了两个框的重叠程度，但在重叠程度相同的情况下，我们其实更希望两个框能挨得足够近，即框的中心要尽量靠近。因此，DIoU在IoU loss的基础上考虑了两个框的中心点距离，具体定义如下：<br>$$<br>L_D = 1 - IoU + R(P,G)= 1 - IoU + \frac{\rho^2(p,g)}{c^2}<br>$$<br>其中，$\rho$表示预测框和标注框中心端的距离，$p$和$g$是两个框的中心点。$c$表示两个框的最小包围矩形框的对角线长度。当两个框距离无限远时，中心点距离和外接矩形框对角线长度无限逼近，$R \rightarrow1$</p>
+<p>下图直观显示了不同情况下的IoU loss、GIoU loss和DIoU loss结果：</p>
+<p><img src="/2020/03/27/loss-functions-in-object-detection/image-20200326140845852.png" alt="image-20200326140845852"></p>
+<p>其中，绿色框表示标注框，红色框表示预测框，可以看出，最后一组的结果由于两个框中心点重合，检测效果要由于前面两组。IoU loss和GIoU loss的结果均为0.75，并不能区分三种情况，而DIoU loss则对三种情况做了很好的区分。</p>
+<h2 id="CIoU-Loss"><a href="#CIoU-Loss" class="headerlink" title="CIoU Loss"></a>CIoU Loss</h2><p>DIoU loss考虑了两个框中心点的距离，而CIoU loss在DIoU loss的基础上做了更详细的度量，具体包括：</p>
+<ul>
+<li>重叠面积</li>
+<li>中心端距离</li>
+<li>长宽比</li>
+</ul>
+<p>具体定义如下：<br>$$<br>L_C = 1 - IoU + R(P,G)= 1 - IoU + \frac{\rho^2(p,g)}{c^2} + \alpha v<br>$$<br>其中:<br>$$<br>\begin{align*}<br>v &amp;= \frac{4}{\pi^2}(arctan\frac{w^g}{h^g} - arctan\frac{w^p}{h^p})^2 \</p>
+<p>\alpha &amp;= \frac{v}{(1-IoU)+v}<br>\end{align*}<br>$$<br>可以看出，CIoU loss在DIoU loss的不同在于最后一项$\alpha v$，$v$度量了两个框的长宽比的距离，$\alpha$相当于一个平衡系数，取值由IoU和$v$共同决定。需要注意的是，计算$v$关于$w^p$和$h^p$的梯度时，会在分母上出现${w^p}^2+{h^p}^2$，而CIoU中，$w^p$和$h^p$均是归一化后的值，会导致${w^p}^2+{h^p}^2$的结果很小，容易出现梯度爆炸。因此，在官方的代码实现上，对损失函数做了优化，移除了梯度公式中${w^p}^2+{h^p}^2$。</p>
+<p>在使用CIoU loss时需要注意的是，在代码实现上，公式中的$v$仅用于计算$\alpha$，而原来的$v$会用另一个变量$a_r$代替，在计算$a_r$的时候需要用到标准化的宽高（使用绝对宽高loss会发散）。</p>
+<p><strong>注：关于IoU系列损失更详细的分析可以参考论文：<a href="https://arxiv.org/pdf/1911.08287.pdf" target="_blank" rel="noopener">Distance-IoU Loss: Faster and Better Learning for Bounding Box Regression</a></strong></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机视觉/" rel="tag"># 计算机视觉</a>
+          
+            <a href="/tags/目标检测/" rel="tag"># 目标检测</a>
+          
+            <a href="/tags/损失函数/" rel="tag"># 损失函数</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/16/Libra-R-CNN/" rel="next" title="Libra R-CNN">
+                <i class="fa fa-chevron-left"></i> Libra R-CNN
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/emoji.jpg"
+                alt="Meringue" />
+            
+              <p class="site-author-name" itemprop="name">Meringue</p>
+              <p class="site-description motion-element" itemprop="description">z_jiahuan@outlook.com</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ZhouJiaHuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/sinat_34474705" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#类别损失"><span class="nav-number">1.</span> <span class="nav-text">类别损失</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cross-Entropy-Loss"><span class="nav-number">1.1.</span> <span class="nav-text">Cross Entropy Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Focal-Loss"><span class="nav-number">1.2.</span> <span class="nav-text">Focal Loss</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#位置损失"><span class="nav-number">2.</span> <span class="nav-text">位置损失</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#L1-Loss"><span class="nav-number">2.1.</span> <span class="nav-text">L1 Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#L2-Loss"><span class="nav-number">2.2.</span> <span class="nav-text">L2 Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Smooth-L1-Loss"><span class="nav-number">2.3.</span> <span class="nav-text">Smooth L1 Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IoU-Loss"><span class="nav-number">2.4.</span> <span class="nav-text">IoU Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GIoU-Loss"><span class="nav-number">2.5.</span> <span class="nav-text">GIoU Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DIoU-Loss"><span class="nav-number">2.6.</span> <span class="nav-text">DIoU Loss</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CIoU-Loss"><span class="nav-number">2.7.</span> <span class="nav-text">CIoU Loss</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Meringue</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

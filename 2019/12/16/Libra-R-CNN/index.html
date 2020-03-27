@@ -91,12 +91,12 @@
 <meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1573299197714.png">
 <meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1574170974738.png">
 <meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575900433559.png">
-<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/E:/OneDrive/Notes/论文笔记/Libra%20R-CNN.assets/1575900480543.png">
+<meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575900480543.png">
 <meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575900943010.png">
 <meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575900598363.png">
 <meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575901317663.png">
 <meta property="og:image" content="http://yoursite.com/2019/12/16/Libra-R-CNN/1575901670971.png">
-<meta property="og:updated_time" content="2020-03-08T05:49:58.562Z">
+<meta property="og:updated_time" content="2020-03-08T06:02:05.706Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Libra R-CNN">
 <meta name="twitter:description" content="论文地址：https://arxiv.org/pdf/1904.02701.pdf 摘要相比于模型框架，模型的训练过程对于检测器是否成功也同样重要。在本文工作中，我们重新研究了标准的训练过程，发现检测的性能经常受限于模型训练过程中的不平衡。这种不平衡包括以下3个层面：采样层面、特征层面和目标层面。为了缓和着中国不平嗯带来的不利影响，我们提出了一种简单有效的面向目标检测中的不平衡学习的框架，即Lib">
@@ -384,7 +384,7 @@
 <p>在用卷积神经网络提取图片特征时，不同深度的特征图按大小分成不同的层级，越浅层的特征图越大，越深层的特征图越小。为了增强特征图的表达能力，在目标检测中常把不同层级的特征图融合在一起（典型的方式如特征金字塔融合相邻的特征信息），Libra R-CNN的做法相对于是对于特征金字塔的延伸，利用多个层级的特征图信息来加强每一层级特征图的表达能力。具体过程如上图，首先对于几个不同层级的特征图$C_2, C_3, C_4, C_5$,都resize到一个中间大小（如$C_4$）,对于比$C_4$小的$C_5$，采用插值的方式调整大小，对于比$C_4$大的$C_2, C_3$，采用最大池化的方式调整。之后再求4个层级的特征图的均值得到综合的特征图信息。最后再把得到的特征图均值以插值/最大池化的方式融合到各个层级的特征图上，从而实现多层级的特征融合。</p>
 <h2 id="平衡化L1损失"><a href="#平衡化L1损失" class="headerlink" title="平衡化L1损失"></a>平衡化L1损失</h2><p>目标检测损失中包含分类损失和位置损失。平衡两类损失，最普遍的做法是给位置损失加一个权重。但这种做法会有一个潜在的问题：对于训练中的少数困难样本，预测的结果和实际的位置往往偏差较大，此时权重会将大的损失放大，从而产生更大的梯度信息，严重时可能会破坏模型的收敛过程，同时弱化多数简单样本产生的梯度信息。因此，为了平衡不同难度的样本带来的位置损失，论文基于smooth L1损失，提出了balanced L1损失，其对应的损失函数和梯度表达式如下：</p>
 <p><img src="/2019/12/16/Libra-R-CNN/1575900433559.png" alt="1575900433559"></p>
-<p><img src="/2019/12/16/Libra-R-CNN/E:/OneDrive\Notes\论文笔记\Libra R-CNN.assets\1575900480543.png" alt="1575900480543"></p>
+<p><img src="/2019/12/16/Libra-R-CNN/1575900480543.png" alt="1575900480543"></p>
 <p>其中，几个参数项满足以下约束：</p>
 <p><img src="/2019/12/16/Libra-R-CNN/1575900943010.png" alt="1575900943010"></p>
 <p>对应的曲线如下：</p>
@@ -435,6 +435,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/27/loss-functions-in-object-detection/" rel="prev" title="目标检测中的常用损失函数">
+                目标检测中的常用损失函数 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -515,7 +519,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -537,7 +541,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
