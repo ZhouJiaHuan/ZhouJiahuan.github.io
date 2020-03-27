@@ -88,7 +88,7 @@
 <meta property="og:description" content="一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：  f(x)=\left\{">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/2020/03/27/loss-functions-in-object-detection/image-20200326140845852.png">
-<meta property="og:updated_time" content="2020-03-27T12:11:37.581Z">
+<meta property="og:updated_time" content="2020-03-27T12:27:20.654Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="目标检测中的常用损失函数">
 <meta name="twitter:description" content="一般的目标检测模型包含两类损失函数，一类是类别损失（分类），另一类是位置损失（回归）。这两类损失函数往往用于检测模型最后一部分，根据模型输出（类别和位置）和实际标注框（类别和位置）分别计算类别损失和位置损失。 类别损失Cross Entropy Loss交叉熵损失是基于“熵”这个概念，熵用来衡量信息的不确定性。对于概率分布为$p(X)$的随机变量$X$,熵可以表示为：  f(x)=\left\{">
@@ -841,6 +841,26 @@ v &= \frac{4}{\pi^2}(arctan\frac{w^g}{h^g} - arctan\frac{w^p}{h^p})^2 \\
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
