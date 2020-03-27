@@ -91,7 +91,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/10/22/Cascade-R-CNN/1571322928861.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/22/Cascade-R-CNN/1571461487746.png">
 <meta property="og:image" content="http://yoursite.com/2019/10/22/Cascade-R-CNN/1571465388155.png">
-<meta property="og:updated_time" content="2020-03-08T05:39:46.591Z">
+<meta property="og:updated_time" content="2020-03-27T12:33:12.748Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Cascade R-CNN">
 <meta name="twitter:description" content="摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的">
@@ -525,7 +525,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -782,6 +782,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

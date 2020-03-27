@@ -92,7 +92,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/07/24/visual-part-in-NAO-golf//3.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/24/visual-part-in-NAO-golf//8.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/24/visual-part-in-NAO-golf//7.png">
-<meta property="og:updated_time" content="2020-03-07T16:41:48.812Z">
+<meta property="og:updated_time" content="2020-03-27T12:33:18.335Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="NAO机器人高尔夫中的视觉系统设计">
 <meta name="twitter:description" content="去年（2017）年分别参加了江苏省和全国的NAO机器人高尔夫比赛，负责的是视觉部分编程。在这里把之前的工作总结一下。内容主要包括红球和黄杆的识别和定位（包括在比赛中遇到的一些问题和解决办法）。完整的代码（C++和Python两个版本）都可以在我的GitHub上 https://github.com/ZhouJiaHuan/nao-golf-visual-task 下载，本篇只以Python代码为例">
@@ -542,7 +542,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -799,6 +799,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572706097101.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572791227108.png">
 <meta property="og:image" content="http://yoursite.com/2019/11/03/TridentNet/1572791959160.png">
-<meta property="og:updated_time" content="2020-03-08T05:55:55.038Z">
+<meta property="og:updated_time" content="2020-03-27T12:33:43.338Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="TridentNet">
 <meta name="twitter:description" content="摘要尺度变化是目标检测领域中的重要挑战之一。在本文工作中，我们做实验研究了目标检测中感受野对于尺度变化的影响。基于这些实验结论，我们提出了一种新颖的三叉戟网络（TridentNet），旨在生成特定大小的特征图。我们构建了一个多支路并行的网络结构，每个分支共享参数但感受野不同。之后对于每一条分支，我们将目标采样到合适的尺寸用于训练。我们还提出了一个快速版的TridentNet（置用一条支路进行推理）">
@@ -531,7 +531,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -788,6 +788,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 

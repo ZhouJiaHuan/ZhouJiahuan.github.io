@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="目标检测,HOG特征,SVM,交通标志检测," />
 
 
 
@@ -80,6 +80,7 @@
 
 
 <meta name="description" content="本文主要讲如何通过HOG特征和SVM分类器实现部分交通标志的检测。由于能力有限，本文的检测思路很简单，主要是用来自己练习编程用，也顺便发布出来供需要的人参考。本项目完整的代码可以在我的github上下载：traffic-sign-detection。博客或代码中遇到的任何问题，欢迎指出，希望能相互学习。废话不多说了，下面就来一步步介绍我的检测过程。** 数据集数据集都是我的一个学妹帮忙采集的。在此">
+<meta name="keywords" content="目标检测,HOG特征,SVM,交通标志检测">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一次不太成功的项目实战：HOG特征+SVM实现交通标志的检测">
 <meta property="og:url" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM/index.html">
@@ -100,7 +101,7 @@
 <meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img10.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img11.png">
 <meta property="og:image" content="http://yoursite.com/2018/07/04/Traffic-signs-Detection-with-HOG-and-SVM//img12.png">
-<meta property="og:updated_time" content="2018-07-23T11:39:13.285Z">
+<meta property="og:updated_time" content="2020-03-27T12:32:09.344Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一次不太成功的项目实战：HOG特征+SVM实现交通标志的检测">
 <meta name="twitter:description" content="本文主要讲如何通过HOG特征和SVM分类器实现部分交通标志的检测。由于能力有限，本文的检测思路很简单，主要是用来自己练习编程用，也顺便发布出来供需要的人参考。本项目完整的代码可以在我的github上下载：traffic-sign-detection。博客或代码中遇到的任何问题，欢迎指出，希望能相互学习。废话不多说了，下面就来一步步介绍我的检测过程。** 数据集数据集都是我的一个学妹帮忙采集的。在此">
@@ -307,6 +308,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/项目实战/" itemprop="url" rel="index">
+                    <span itemprop="name">项目实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -429,6 +452,18 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/目标检测/" rel="tag"># 目标检测</a>
+          
+            <a href="/tags/HOG特征/" rel="tag"># HOG特征</a>
+          
+            <a href="/tags/SVM/" rel="tag"># SVM</a>
+          
+            <a href="/tags/交通标志检测/" rel="tag"># 交通标志检测</a>
+          
+        </div>
+      
 
       
       
@@ -549,7 +584,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -806,6 +841,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
