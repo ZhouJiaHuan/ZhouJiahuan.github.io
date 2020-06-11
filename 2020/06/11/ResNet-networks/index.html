@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="计算机视觉,目标检测," />
+  <meta name="keywords" content="计算机视觉,卷积神经网络," />
 
 
 
@@ -79,23 +79,21 @@
 
 
 
-<meta name="description" content="摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的">
-<meta name="keywords" content="计算机视觉,目标检测">
+<meta name="description" content="前言第一次看ResNet论文的时候，由于刚接触深度学习不久，对ResNet的理解仅仅停留在论文中阐述的一些基本思想。加上当时实验室的硬件条件很有限，用的模型基本上以AlexNet和VGG为主，并没有在学习中使用过ResNet。因此忽略了论文中提出的几种典型ResNet网络。一直到工作后，才发现ResNet的几种典型结构在诸多计算机视觉任务中都充当着非常重要的角色，因此很有必要更细致地了解一下Res">
+<meta name="keywords" content="计算机视觉,卷积神经网络">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Cascade R-CNN">
-<meta property="og:url" content="http://yoursite.com/2019/10/22/Cascade-R-CNN/index.html">
+<meta property="og:title" content="ResNet-networks">
+<meta property="og:url" content="http://yoursite.com/2020/06/11/ResNet-networks/index.html">
 <meta property="og:site_name" content="Meringue&#39;s Blog">
-<meta property="og:description" content="摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的">
+<meta property="og:description" content="前言第一次看ResNet论文的时候，由于刚接触深度学习不久，对ResNet的理解仅仅停留在论文中阐述的一些基本思想。加上当时实验室的硬件条件很有限，用的模型基本上以AlexNet和VGG为主，并没有在学习中使用过ResNet。因此忽略了论文中提出的几种典型ResNet网络。一直到工作后，才发现ResNet的几种典型结构在诸多计算机视觉任务中都充当着非常重要的角色，因此很有必要更细致地了解一下Res">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/10/22/Cascade-R-CNN//1571322842768.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/22/Cascade-R-CNN/1571322928861.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/22/Cascade-R-CNN/1571461487746.png">
-<meta property="og:image" content="http://yoursite.com/2019/10/22/Cascade-R-CNN/1571465388155.png">
-<meta property="og:updated_time" content="2020-03-27T12:33:12.748Z">
+<meta property="og:image" content="http://yoursite.com/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152358539.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152330288.png">
+<meta property="og:updated_time" content="2020-06-11T10:18:05.765Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Cascade R-CNN">
-<meta name="twitter:description" content="摘要在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的">
-<meta name="twitter:image" content="http://yoursite.com/2019/10/22/Cascade-R-CNN//1571322842768.png">
+<meta name="twitter:title" content="ResNet-networks">
+<meta name="twitter:description" content="前言第一次看ResNet论文的时候，由于刚接触深度学习不久，对ResNet的理解仅仅停留在论文中阐述的一些基本思想。加上当时实验室的硬件条件很有限，用的模型基本上以AlexNet和VGG为主，并没有在学习中使用过ResNet。因此忽略了论文中提出的几种典型ResNet网络。一直到工作后，才发现ResNet的几种典型结构在诸多计算机视觉任务中都充当着非常重要的角色，因此很有必要更细致地了解一下Res">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152358539.png">
 
 
 
@@ -125,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/10/22/Cascade-R-CNN/"/>
+  <link rel="canonical" href="http://yoursite.com/2020/06/11/ResNet-networks/"/>
 
 
 
 
 
-  <title>Cascade R-CNN | Meringue's Blog</title>
+  <title>ResNet-networks | Meringue's Blog</title>
   
 
 
@@ -258,7 +256,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/22/Cascade-R-CNN/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/11/ResNet-networks/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Meringue">
@@ -275,7 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Cascade R-CNN</h1>
+          <h1 class="post-title" itemprop="name headline">ResNet-networks</h1>
         
 
         <div class="post-meta">
@@ -287,8 +285,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-22T13:19:49+08:00">
-                2019-10-22
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-11T18:13:50+08:00">
+                2020-06-11
               </time>
             
 
@@ -347,37 +345,57 @@
       
 
       
-        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>在目标检测中，使用IOU来定义正负样本。用比较低的IOU阈值（如0.5）训练得到的模型在检测时往往包含噪声。相反地，如果增加IOU阈值，检测性能会下降。产生这种现象的原因有两个：（1）训练过程中正样本的迅速减少导致的过拟合；（2）训练和推理阶段IOU阈值的不匹配。本文提出一个多阶段检测模型Cascade R-CNN来解决上述问题。这个模型由一系列用递增的IOU阈值训练的模型组成，因此对于困难的假正样本有更好的辨别能力。检测模型逐级训练，前一级的模型可以为下一级质量更好的模型提供一个较好的分布。这种渐进的重采样方式保证了所有的模型都有大致相同的正样本比例，缓解了过拟合问题。在推理阶段采用相同的处理过程，因此在训练和推理过程中模型假设和每一阶段的模型质量都更加匹配。在COCO数据集上，Cascade R-CNN超过了当前所有的单模型。实验结果也表明，Cascade R-CNNk可以广泛用于目标检测框架，并相对于基础模型都有稳定的提升。源码将开源在<a href="https://github.com/zhaoweicai/cascade-rcnn" target="_blank" rel="noopener">https://github.com/zhaoweicai/cascade-rcnn</a>.</p>
-<h1 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h1><p>IOU阈值的选取对训练和推理都有很重要的影响。对比下面的两个图，当IOU阈值取值较低时，如0.5，在训练阶段，会产生大量包含噪声的正样本，这些正样本与ground truth的IOU比较低，不利于模型的训练，而当提高IOU阈值时，如0.7，虽然可以规避大量包含噪声的正样本，但是又带来另外一个问题：正样本大大减少，负样本（即北背景）在训练集中占主导作用，很容易导致模型过拟合（模型将所有的样本都预测为负样本）。</p>
-<p><img src="/2019/10/22/Cascade-R-CNN/\1571322842768.png" alt="1571322842768"></p>
-<p>还有一个问题就是，在推理阶段，模型对于与IOU阈值相近的ROI预测结果较好，而对于其他的ROI预测效果一般。也就是推理阶段与训练阶段IOU的不匹配。论文中给出了更直观的实验对比。</p>
-<p><img src="/2019/10/22/Cascade-R-CNN/1571322928861.png" alt="1571322928861"></p>
-<p>从上图中的对比可以得出2点实验结论：</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>第一次看ResNet论文的时候，由于刚接触深度学习不久，对ResNet的理解仅仅停留在论文中阐述的一些基本思想。加上当时实验室的硬件条件很有限，用的模型基本上以AlexNet和VGG为主，并没有在学习中使用过ResNet。因此忽略了论文中提出的几种典型ResNet网络。一直到工作后，才发现ResNet的几种典型结构在诸多计算机视觉任务中都充当着非常重要的角色，因此很有必要更细致地了解一下ResNet的经典网络。若是刚接触ResNet，还是建议从最论文开始看起，我自己也写过一遍对于ResNet原理的简单介绍，见<a href="https://blog.csdn.net/sinat_34474705/article/details/78938253" target="_blank" rel="noopener">论文笔记：Deep Residual Network</a></p>
+<p>ResNet的经典网络结构有：ResNet-18、ResNet-34、ResNet-50、ResNet-101、ResNet-152几种，其中，ResNet-18和ResNet-34的基本结构相同，属于相对浅层的网络，后面3种的基本结构不同于ResNet-18和ResNet-34，属于更深层的网络。本篇文章以ResNet-34和ResNet-50为例进行介绍。</p>
+<h1 id="ResNet结构"><a href="#ResNet结构" class="headerlink" title="ResNet结构"></a>ResNet结构</h1><p>不论是多少层的ResNet网络，它们都有以下共同点：</p>
 <ul>
-<li>所有的候选框在输入模型后，IOU均有不同程度的提升，但模型对于与IOU阈值相近的候选框的提升最明显。例如上图（c）中，IOU阈值为0.5的模型，在输入阈值在0.5-0.6区间的候选框的提升效果最好，IOU阈值为0.6的模型对于输入阈值在0.6-0.75区间的提升最好，IOU阈值为0.7的模型在候选框阈值高于0.75时提升效果最好</li>
-<li>IOU阈值并不是越高越好，如上图（d）中，IOU阈值从0.5提高到0.6后，变化不大，而进一步提高到0.7的时候，模型的AP值有明显的下降。</li>
+<li>网络一共包含5个卷积组，每个卷积组中包含1个或多个基本的卷积计算过程（Conv-&gt; BN-&gt;ReLU）</li>
+<li>每个卷积组中包含1次下采样操作，使特征图大小减半，下采样通过以下两种方式实现：<ul>
+<li>最大池化，步长取2，只用于第2个卷积组（Conv2_x）</li>
+<li>卷积，步长取2，用于除第2个卷积组之外的4个卷积组</li>
 </ul>
-<p>因此，自然而然地就会想到，如果结合不用IOU阈值水平的模型的结果，检测性能会不会提高呢？这也正是Cascade R-CNN的思想所在。更详细地说，Cascade R-CNN级联多个检测模型，每个模型的IOU阈值逐步提高，例如，第阶段模型阈值设为0.5，第二阶段设为0.6，第三阶段设为0.7。这样，一个IOU较低的候选框，如0.55，在输入到第一阶段模型后，经一次边界框回归，输出提高一点，如0.65，再到二阶段模型，第二次边界框回归，输出的IOU又提高一点，如0.75，再经过最后一个阶段，候选框的IOU就可以回归到一个较高的水平了。</p>
-<h1 id="主要工作"><a href="#主要工作" class="headerlink" title="主要工作"></a>主要工作</h1><h2 id="Cascade-R-CNN结构"><a href="#Cascade-R-CNN结构" class="headerlink" title="Cascade R-CNN结构"></a>Cascade R-CNN结构</h2><p><img src="/2019/10/22/Cascade-R-CNN/1571461487746.png" alt="1571461487746"></p>
-<p>论文基于前面的分析，提出了Cascade R-CNN检测框架，如上图。其中，I表示输入的图片，conv表示卷积层主干网络，pool表示特征提取最后的部分（如ROI池化），H表示网络的头部，B表示边界框预测、C表示类别预测。</p>
-<p>由于采用单一的网络无法在所有的IOU上都得到有效的提升（低IOU阈值对IOU较低的提升明显，对IOU较高的提升一般，高IOU阈值同理），因此，Cascade R-CNN提出了级联的检测结构，每一级的IOU阈值逐步提高，这样，在所有不同IOU的候选框在经过第一级的特征提取、目标类别预测和边界框回归后，其中一部分的候选框（IOU较低的那部分）得到了显著的提高。当经第一次回归后的所有边界框进入第二阶段后，原来IOU很低的候选框已经基本没有了，这时候和第二个IOU阈值差不多的候选框在经过本轮的边界框回归，IOU阈值也得到了有效的提升。最后在进入到最后一个分类和边界框回归前，几乎所有的候选框IOU都处于一个较高的水平了，这时候采用一个较高的IOU阈值，大部分的候选框IOU又得到了改善。从整个流程来看，不论在训练阶段还是推理阶段，每一阶段采用的IOU阈值相当于对所有的候选框进行了重采样，候选框的IOU分布在每一级的检测网络都在向好的方向发展。也正是这种训练和推理过程中的重采样，很好的地解决了以下两个问题：</p>
+</li>
+<li>第1个卷积组只包含1次卷积计算操作，5种典型ResNet结构的第1个卷积组完全相同，卷积核均为7x7， 步长为均2</li>
+<li>第2-5个卷积组都包含多个相同的残差单元，在很多代码实现上，通常把第2-5个卷积组分别叫做Stage1、Stage2、Stage3、Stage4</li>
+</ul>
+<h2 id="ResNet-34"><a href="#ResNet-34" class="headerlink" title="ResNet-34"></a>ResNet-34</h2><p>由于论文中对于几种典型的ResNet网络结构画的比较简洁，跟多的是文字叙述，于是我自己根据论文的介绍和MMdetecrion中的ResNet主干网络源码重画了一下ResNet的结构图，下图是ResNet-34的结构图：</p>
+<p><img src="/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152358539.png" alt="image-20200611152358539"></p>
+<p>关于上图有几点需要解释：</p>
 <ul>
-<li>检测网络中的正样本数量和质量都得到了保证，不会因为正样本质量太差（IOU阈值较低）时降低模型训练的质量和正样本（数量太少）时模型的过拟合。</li>
-<li>推理阶段模型和训练过程一致（多级检测模型），因此对所有IOU水平的候选框都可以进行有效的改善，不会因为传统检测网络中采用单一阈值造成的训练和推理过程中的不匹配问题。</li>
+<li>每个绿色的矩形框表示ResNet的一个Stage，从上到下为Stage1 (Conv2_x)、Stage2 (Conv3_x)、Stage3 (Conv4_x)、Stage4 (Conv5_x)</li>
+<li>绿色矩形框内的每个黄色的矩形框表示1个或多个标准的残差单元，黄色矩形框左侧的数值表示残差单元级联的数量，如5x表示5个级联的残差单元</li>
+<li>通道数变化：输入通道为3，4个Stage的通道数依次为64、128、256、512，即每经过一个Stage通道数翻倍</li>
+<li>层数计算：每个Stage包含的残差单元数量依次为3、4、6、3，每个残差单元包含2个卷积层，再算上第一个7x7卷积层和3x3最大池化层，总的层数=（3+4+6+3）*2+1+1 = 34</li>
+<li>下采样：黄色矩形框中紫色的部分代表发生下采样操作，即特征图大小减半，右侧箭头标识即为下采样后的特征图大小（输入224x224为例）；第一个绿色矩形框内的橙色矩形框表示最大池化，此处发生第一次下采样</li>
+<li>卷积层参数解释：以Conv 3x3, c512, s2, p1为例， 3x3表示卷积核大小，c512表示卷积核数量/输出通道数量为512，s2表示卷积步长为2，p1表示卷积的padding取1。</li>
+<li>池化层参数解释：Max_pool 3x3, c64, s2, p1，3x3表示池化的区域大小（类似于卷积核大小），c64表示输入输出通道为64，s2表示池化的步长为2，p1表示padding取1</li>
 </ul>
-<h2 id="模型实现细节"><a href="#模型实现细节" class="headerlink" title="模型实现细节"></a>模型实现细节</h2><p>论文中也将了很多Cascade R-CNN在实现上的细节，如：</p>
+<p>对结构有一个大致的了解后，我们会发现：<strong>ResNet中的下采样操作发生在每个Stage的第一个残差单元或最大池化层，实现方式是操作都是通过在卷积或者池化中取步长为2。</strong></p>
+<p>另外，对于另外1个网络ResNet-18,和ResNet-34的区别在于每个Stage级联的残差单元数量不同，ResNet-184个Stage残差单元数量均为2，总层数=(2+2+2+2)*2+1+1 = 18</p>
+<h2 id="ResNet-50"><a href="#ResNet-50" class="headerlink" title="ResNet-50"></a>ResNet-50</h2><p>ResNet-50的的整体结构于ResNet-18类型，具体如下：</p>
+<p><img src="/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152330288.png" alt="image-20200611152330288"></p>
+<p>与ResNet-18/34的主要区别在于以下几点：</p>
 <ul>
-<li>网络在所有阶段都采用相同的检测结构，除了主干网络之外，Cascade R-CNN包含4个阶段的网络，其中1个RPN网络，3个不同IOU阈值（分别为0.5，0.6，07）的检测网络，每个检测网络的输出是下一个检测网络的输入（重采样机制）</li>
-<li>样本增广策略中只采用了水平翻转，推理阶段采用采用固定的图片大小（未采用多尺度和扩充等方式提高精度）</li>
-<li>采用了3种主流的主干网络进行实验对比，分别为基于VGG的Faster R-CNN、基于ResNet的R-FCN和FPN，且大部分采用默认参数（论文中有更详细的介绍）。</li>
+<li>基本残差单元<ul>
+<li>ResNet-18/34的残差单元包含2个3x3卷积层</li>
+<li>ResNet-50的残差单元包含3个卷积层，依次为1x1,3x3和1x1</li>
 </ul>
-<h2 id="实验对比"><a href="#实验对比" class="headerlink" title="实验对比"></a>实验对比</h2><p><img src="/2019/10/22/Cascade-R-CNN/1571465388155.png" alt="1571465388155"></p>
-<p>论文中主要做了两类对比：</p>
-<ul>
-<li><strong>横向对比</strong>，Cascade R-CNN和目前性能排名靠前的单模型结果对比，即上图中的Table 5，从中可以看出，基于Resnet-101的Cascade R-CNN在COCO检测任务的各个指标上都明显高于主流的单模型（从中可以看出，基于Focal Loss的一阶段模型Retinanet也表现不俗）</li>
-<li><strong>纵向对比</strong>，论文基于几种主流的主干网络和检测框架，对比了加入Cascade机制前后的性能，即Table 6，从中可以看出，Cascade机制加入后，虽然在训练时间、推理时间和参数数量上都有一些牺牲，但终归瑕不掩瑜，在COCO检测任务的各个指标上都带来了大幅度提升。</li>
+</li>
+<li>通道数变化<ul>
+<li>ResNet-18/34的通道数在每个Stage的第1个残差单元的第1个卷积层输出翻倍，后续通道数保持不变</li>
+<li>ResNet-50的通道数在每个Stage的第1个残差单元的输出部分翻倍，而每个残差单元内部也伴随着通道数的变化（有减少也有增加，依靠1x1卷积层来调节），这主要是为了在深层的网络中减少参数数量。</li>
 </ul>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Cascade R-CNN的出发点是为了解决采用单模型时单一IOU阈值带来的各种问题，通过简单地采用多级IOU阈值进行检测，就可以很好地解决单一IOU阈值的通病。虽然最后在模型的训练推理时间和参数量上有一定的牺牲，但在检测精度上却大幅度提升。因此在对检测时间要求不太苛刻的条件下，Cascade机制显然是个不错的选择。另外，我觉得Cascade R-CNN的意义不仅仅在于在公共数据集上带了多大的提升，更重要的是，为目标检测（甚至推广到实例分割任务上）提供了一种新思路，毕竟Cascade R-CNN的的多级网络机制可以很好地推广到其他任务上。</p>
+</li>
+<li>下采样时刻<ul>
+<li>ResNet-18/34的下采样操作发生在每个Stage(不包括Stage1)第1个残差单元中的第1个卷积层(conv 3x3)</li>
+<li>ResNet-50的下采样操作发生在每个Stage(不包括Stage1)第1个残差单元中的第2个卷积层(conv 3x3)</li>
+</ul>
+</li>
+</ul>
+<p>类似的，对于ResNet-101/152，与ResNet-50的区别也仅在于与每个Stage残差单元数量的不同，ResNet-50为(3,4,6,3)，ResNet-101为（3，4，23，3），ResNet-152为（3，8，36，3），总层数的计算方式与ResNet-34类似，只是残差单元中卷积层数量由变为3。</p>
+<h1 id="ResNet变种"><a href="#ResNet变种" class="headerlink" title="ResNet变种"></a>ResNet变种</h1><p>其实在许多计算机视觉任务的实现上，为了适应不同任务的特性，ResNet的结构也会发生细微的调整，例如在Caffe的实现中，把ResNet-50/101-152的下采样操作置于每个残差单元的第1个卷积层（conv 1x1）;还有的实现中（如MMdetection），把第一个7x7的卷积层用2个3x3的卷积层代替来代替，以此减少大卷积核的参数。</p>
+<p>另外最近在学习目标跟踪领域中的Siamese网络中发现，ResNet-50在目标跟踪领域中比较流行，但ResNet-50会带来一个问题：多次的下采样会降低目标跟踪的精度，而直接取消下采样操作又会降低网络的感受野。因此，为了在减少ResNet中下采样次数的同时保持原有的感受野，在ResNet-50中往往会舍弃1-2个下采样层（步长变回1），并使用膨胀卷积来保证原有的感受野不变（如Siamese RPN++和Siammask）,有兴趣的可以去了解一下，这里不再过多介绍。</p>
+<h1 id="结语"><a href="#结语" class="headerlink" title="结语"></a>结语</h1><p>本篇文章着重介绍ResNet的几种典型网络，对于基本的原理和思想没有过多提及，文中的内容主要根据论文原文和MMdetection中的源码来写的，有不恰当或错误的地方还请指正。</p>
 
       
     </div>
@@ -397,7 +415,7 @@
           
             <a href="/tags/计算机视觉/" rel="tag"># 计算机视觉</a>
           
-            <a href="/tags/目标检测/" rel="tag"># 目标检测</a>
+            <a href="/tags/卷积神经网络/" rel="tag"># 卷积神经网络</a>
           
         </div>
       
@@ -410,8 +428,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/07/24/visual-part-in-NAO-golf/" rel="next" title="NAO机器人高尔夫中的视觉系统设计">
-                <i class="fa fa-chevron-left"></i> NAO机器人高尔夫中的视觉系统设计
+              <a href="/2020/03/27/loss-functions-in-object-detection/" rel="next" title="目标检测中的常用损失函数">
+                <i class="fa fa-chevron-left"></i> 目标检测中的常用损失函数
               </a>
             
           </div>
@@ -419,10 +437,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/03/TridentNet/" rel="prev" title="TridentNet">
-                TridentNet <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -574,7 +588,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动机"><span class="nav-number">2.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#主要工作"><span class="nav-number">3.</span> <span class="nav-text">主要工作</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cascade-R-CNN结构"><span class="nav-number">3.1.</span> <span class="nav-text">Cascade R-CNN结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#模型实现细节"><span class="nav-number">3.2.</span> <span class="nav-text">模型实现细节</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实验对比"><span class="nav-number">3.3.</span> <span class="nav-text">实验对比</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ResNet结构"><span class="nav-number">2.</span> <span class="nav-text">ResNet结构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ResNet-34"><span class="nav-number">2.1.</span> <span class="nav-text">ResNet-34</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ResNet-50"><span class="nav-number">2.2.</span> <span class="nav-text">ResNet-50</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ResNet变种"><span class="nav-number">3.</span> <span class="nav-text">ResNet变种</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结语"><span class="nav-number">4.</span> <span class="nav-text">结语</span></a></li></ol></div>
             
 
           </div>
