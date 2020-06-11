@@ -82,18 +82,18 @@
 <meta name="description" content="前言第一次看ResNet论文的时候，由于刚接触深度学习不久，对ResNet的理解仅仅停留在论文中阐述的一些基本思想。加上当时实验室的硬件条件很有限，用的模型基本上以AlexNet和VGG为主，并没有在学习中使用过ResNet。因此忽略了论文中提出的几种典型ResNet网络。一直到工作后，才发现ResNet的几种典型结构在诸多计算机视觉任务中都充当着非常重要的角色，因此很有必要更细致地了解一下Res">
 <meta name="keywords" content="计算机视觉,卷积神经网络">
 <meta property="og:type" content="article">
-<meta property="og:title" content="ResNet-networks">
+<meta property="og:title" content="ResNet的几种典型网络结构">
 <meta property="og:url" content="http://yoursite.com/2020/06/11/ResNet-networks/index.html">
 <meta property="og:site_name" content="Meringue&#39;s Blog">
 <meta property="og:description" content="前言第一次看ResNet论文的时候，由于刚接触深度学习不久，对ResNet的理解仅仅停留在论文中阐述的一些基本思想。加上当时实验室的硬件条件很有限，用的模型基本上以AlexNet和VGG为主，并没有在学习中使用过ResNet。因此忽略了论文中提出的几种典型ResNet网络。一直到工作后，才发现ResNet的几种典型结构在诸多计算机视觉任务中都充当着非常重要的角色，因此很有必要更细致地了解一下Res">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152358539.png">
-<meta property="og:image" content="http://yoursite.com/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152330288.png">
-<meta property="og:updated_time" content="2020-06-11T10:18:05.765Z">
+<meta property="og:image" content="http://yoursite.com/2020/06/11/ResNet-networks/image-20200611152358539.png">
+<meta property="og:image" content="http://yoursite.com/2020/06/11/ResNet-networks/image-20200611152330288.png">
+<meta property="og:updated_time" content="2020-06-11T10:23:35.379Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="ResNet-networks">
+<meta name="twitter:title" content="ResNet的几种典型网络结构">
 <meta name="twitter:description" content="前言第一次看ResNet论文的时候，由于刚接触深度学习不久，对ResNet的理解仅仅停留在论文中阐述的一些基本思想。加上当时实验室的硬件条件很有限，用的模型基本上以AlexNet和VGG为主，并没有在学习中使用过ResNet。因此忽略了论文中提出的几种典型ResNet网络。一直到工作后，才发现ResNet的几种典型结构在诸多计算机视觉任务中都充当着非常重要的角色，因此很有必要更细致地了解一下Res">
-<meta name="twitter:image" content="http://yoursite.com/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152358539.png">
+<meta name="twitter:image" content="http://yoursite.com/2020/06/11/ResNet-networks/image-20200611152358539.png">
 
 
 
@@ -129,7 +129,7 @@
 
 
 
-  <title>ResNet-networks | Meringue's Blog</title>
+  <title>ResNet的几种典型网络结构 | Meringue's Blog</title>
   
 
 
@@ -273,7 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">ResNet-networks</h1>
+          <h1 class="post-title" itemprop="name headline">ResNet的几种典型网络结构</h1>
         
 
         <div class="post-meta">
@@ -359,7 +359,7 @@
 <li>第2-5个卷积组都包含多个相同的残差单元，在很多代码实现上，通常把第2-5个卷积组分别叫做Stage1、Stage2、Stage3、Stage4</li>
 </ul>
 <h2 id="ResNet-34"><a href="#ResNet-34" class="headerlink" title="ResNet-34"></a>ResNet-34</h2><p>由于论文中对于几种典型的ResNet网络结构画的比较简洁，跟多的是文字叙述，于是我自己根据论文的介绍和MMdetecrion中的ResNet主干网络源码重画了一下ResNet的结构图，下图是ResNet-34的结构图：</p>
-<p><img src="/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152358539.png" alt="image-20200611152358539"></p>
+<p><img src="/2020/06/11/ResNet-networks/image-20200611152358539.png" alt="image-20200611152358539"></p>
 <p>关于上图有几点需要解释：</p>
 <ul>
 <li>每个绿色的矩形框表示ResNet的一个Stage，从上到下为Stage1 (Conv2_x)、Stage2 (Conv3_x)、Stage3 (Conv4_x)、Stage4 (Conv5_x)</li>
@@ -373,7 +373,7 @@
 <p>对结构有一个大致的了解后，我们会发现：<strong>ResNet中的下采样操作发生在每个Stage的第一个残差单元或最大池化层，实现方式是操作都是通过在卷积或者池化中取步长为2。</strong></p>
 <p>另外，对于另外1个网络ResNet-18,和ResNet-34的区别在于每个Stage级联的残差单元数量不同，ResNet-184个Stage残差单元数量均为2，总层数=(2+2+2+2)*2+1+1 = 18</p>
 <h2 id="ResNet-50"><a href="#ResNet-50" class="headerlink" title="ResNet-50"></a>ResNet-50</h2><p>ResNet-50的的整体结构于ResNet-18类型，具体如下：</p>
-<p><img src="/2020/06/11/ResNet-networks/ResNet-networks.assets/image-20200611152330288.png" alt="image-20200611152330288"></p>
+<p><img src="/2020/06/11/ResNet-networks/image-20200611152330288.png" alt="image-20200611152330288"></p>
 <p>与ResNet-18/34的主要区别在于以下几点：</p>
 <ul>
 <li>基本残差单元<ul>
