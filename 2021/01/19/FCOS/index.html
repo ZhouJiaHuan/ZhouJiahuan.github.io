@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="计算机视觉,目标检测," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="摘要我们提出了一个全卷积一阶段目标检测框架，以类似于实例分割的逐像素预测方式来解决目标检测问题。目前几乎所有顶尖的目标检测框架（如RetinaNet，SSD，YOLOv3，Faster R-CNN等）都依赖于预定义的锚框。相反，我们提出的FCOS目标检测框架不需要锚框，当然也不需要候选框。由于移除了大量预定义的锚框，FCOS避免了大量关于锚框的复杂运算，如训练过程中计算框的重叠程度。更重要的是，F">
+<meta name="keywords" content="计算机视觉,目标检测">
+<meta property="og:type" content="article">
+<meta property="og:title" content="FCOS">
+<meta property="og:url" content="http://yoursite.com/2021/01/19/FCOS/index.html">
+<meta property="og:site_name" content="Meringue&#39;s Blog">
+<meta property="og:description" content="摘要我们提出了一个全卷积一阶段目标检测框架，以类似于实例分割的逐像素预测方式来解决目标检测问题。目前几乎所有顶尖的目标检测框架（如RetinaNet，SSD，YOLOv3，Faster R-CNN等）都依赖于预定义的锚框。相反，我们提出的FCOS目标检测框架不需要锚框，当然也不需要候选框。由于移除了大量预定义的锚框，FCOS避免了大量关于锚框的复杂运算，如训练过程中计算框的重叠程度。更重要的是，F">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/2021/01/19/FCOS/image-20200311150242753.png">
+<meta property="og:image" content="http://yoursite.com/2021/01/19/FCOS/image-20200311153313688.png">
+<meta property="og:image" content="http://yoursite.com/2021/01/19/FCOS/image-20200311161004358.png">
+<meta property="og:image" content="http://yoursite.com/2021/01/19/FCOS/image-20210118150021936.png">
+<meta property="og:image" content="http://yoursite.com/2021/01/19/FCOS/image-20210119134944351.png">
+<meta property="og:updated_time" content="2021-01-19T06:49:04.004Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="FCOS">
+<meta name="twitter:description" content="摘要我们提出了一个全卷积一阶段目标检测框架，以类似于实例分割的逐像素预测方式来解决目标检测问题。目前几乎所有顶尖的目标检测框架（如RetinaNet，SSD，YOLOv3，Faster R-CNN等）都依赖于预定义的锚框。相反，我们提出的FCOS目标检测框架不需要锚框，当然也不需要候选框。由于移除了大量预定义的锚框，FCOS避免了大量关于锚框的复杂运算，如训练过程中计算框的重叠程度。更重要的是，F">
+<meta name="twitter:image" content="http://yoursite.com/2021/01/19/FCOS/image-20200311150242753.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/01/19/FCOS/"/>
+
+
+
+
+
+  <title>FCOS | Meringue's Blog</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Meringue's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Cease to struggle and you cease to live</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/01/19/FCOS/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Meringue">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/emoji.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Meringue's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">FCOS</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-19T14:45:00+08:00">
+                2021-01-19
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/论文笔记/" itemprop="url" rel="index">
+                    <span itemprop="name">论文笔记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h1><p>我们提出了一个全卷积一阶段目标检测框架，以类似于实例分割的逐像素预测方式来解决目标检测问题。目前几乎所有顶尖的目标检测框架（如RetinaNet，SSD，YOLOv3，Faster R-CNN等）都依赖于预定义的锚框。相反，我们提出的FCOS目标检测框架不需要锚框，当然也不需要候选框。由于移除了大量预定义的锚框，FCOS避免了大量关于锚框的复杂运算，如训练过程中计算框的重叠程度。更重要的是，FCOS也避免了关于锚框的所有超参数，而模型的最终的检测性能往往对这些超参数很敏感。采用 ResNeXt-64x4d-101主干网络，并仅凭借NMS后处理步骤，FCOS在单模型单尺度预测的条件下达到了44.7%的mAP，在保持模型更简洁的同时超过了当前的一阶段检测框架。我们以一种更简洁且灵活性更强的检测框架提升了检测性能。我们希望FCOS可以成为其他实例层面任务的一种更简洁更强大的替代框架。代码开源在：<a href="https://tinyurl.com/FCOSv1" target="_blank" rel="noopener">https://tinyurl.com/FCOSv1</a></p>
+<h1 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h1><ul>
+<li><p>基于锚框的目标检测框架在检测性能上取得很大成就，但天然地存在以下缺陷：</p>
+<ul>
+<li>检测性能对锚框的大小、比例和数量等参数很敏感，而且这些超参数都需要人工根据经验调节，当参数调节不当的时候，最终的AP波动很大（有实验结果表示在COCO上能达到4%的AP浮动）</li>
+<li>目标的大小往往变化幅度很大，即使锚框参数被调节得很好，在处理多变的目标大小，尤其对于小目标检测时依然存在困难。再者，在应用于新的数据集时，由于目标的分布已经完全不同，锚框参数往往需要重新调节，扩展性较差。</li>
+<li>为了达到更高的召回率，基于锚框的方法需要在输入图片上密集采样，密集采样的结果往往质量不高，且大多为背景样本，这就导致了另外一个问题，即训练过程中正负样本的严重不平衡。（一阶段检测框架密集采样相比于基于RPN的二阶段检测框架的不平衡更严重）</li>
+<li>基于锚框的检测框架会带来更多的计算成本，如计算候选框和标注框之间的IOU</li>
+</ul>
+</li>
+<li><p>基于全卷积结构的像素级预测的方式已广泛应用于视觉领域的很多应用，如实例分割、关键点检测等，而由于锚框机制的存在，目标检测框架很难移植到其他任务上。如果能够避开锚框，也采用一种像素层面的预测方法，这样也可以很好地拓展到其他视觉任务，从而实现视觉任务方法的统一。</p>
+</li>
+</ul>
+<h1 id="FCOS检测框架"><a href="#FCOS检测框架" class="headerlink" title="FCOS检测框架"></a>FCOS检测框架</h1><p><img src="/2021/01/19/FCOS/image-20200311150242753.png" alt="image-20200311150242753"></p>
+<h2 id="整体框架"><a href="#整体框架" class="headerlink" title="整体框架"></a>整体框架</h2><p>和大多数检测框架相同，FCOS检测框架也分为特征提取主干网络、用于多尺度的特征金字塔和用于预测的分类分支和位置回归分支。FCOS的主要思想体现在以下几个方面：</p>
+<p><strong>定义训练样本和正负样本划分。</strong>对于基于锚框的检测方法，训练样本自然就从一系列不同大小的锚框中选取，对于一阶段检测框架，最常见的做法是根据锚框与标注框的IOU来选取及划分正负样本；对于二阶段检测框架，利用RPN网络来选取质量最好的若干个锚框作为训练样本。而FCOS不再依赖于锚框，直接把特征图上的每个位置当作训练样本（和用于实例分割 全卷积网络相同）。更详细地说，对于特征图上的每个位置，如果映射到原图时该位置落在某个标注框里，那么就把它当作训练的正样本，同时该位置对应的类别也是对应标注框的类别，否则的话就把它当作负样本。</p>
+<p><strong>正样本的回归目标。</strong>前面提到过训练样本的类别标签由落在的标注框确定，对于目标位置的回归，FCOS中采用从该位置到对应标注框四条边的距离作为预测的目标，如下图（左）。但这样做会带来一个问题：当某个位置映射到原图后落在了多个标注框里（下图右），该如何确定对应的训练目标呢？FCOS中采用的标准以面积最小的那个标注框作为回归的目标。此外还需要补充的是，为了保证回归的稳定性，FCOS中也采用了一种常见的映射手段，将回归的距离（始终大于0）通过指数函数$exp(x)$进行映射。</p>
+<p><img src="/2021/01/19/FCOS/image-20200311153313688.png" alt="image-20200311153313688"></p>
+<p><strong>网络输出部分设计。</strong>根据样本类别预测和位置回归的设计，对于每个训练样本，FCOS在模型输出时采用两个卷积预测分支，分别是一个输出C维的二值分类预测分支和输出4维的位置预测分支。而对于基于锚框的检测框架，在模型输出部分的维数和每个位置的锚框数量（通常取9）成正比。在这点上，FCOS的输出维数要比基于锚框的方法小很多。</p>
+<p><strong>损失函数设计。</strong>FCOS和其他检测框架一样，损失函数包含类别损失和位置损失。其中，类别损失采用Focal loss，位置损失采用IOU loss，定义如下：</p>
+<p><img src="/2021/01/19/FCOS/image-20200311161004358.png" alt="image-20200311161004358"></p>
+<p>参数$\lambda$用于权衡类别和位置损失，在FCOS中$\lambda$取1。</p>
+<h2 id="FPN用于FCOS"><a href="#FPN用于FCOS" class="headerlink" title="FPN用于FCOS"></a>FPN用于FCOS</h2><p>FCOS中也引入了FPN，一是用来提高FCOS的召回率，二是用来缓解样本训练的二义性问题。前面说过FCOS在遇到一个位置落在两个标注框内的情况时，选取面积小的作为训练的目标。在采用FPN后，FCOS将不同大小的训练样本分到不同层的特征图上，让二义性的情况大大减少。</p>
+<p>更具体地讲，FCOS中共利用5层特征金字塔，分别表示为$P_3,P_4,P_5,P_6,P_7$，其中$P_3,P_4,P_5$由主干网络输出的特征图$C_3,C_4,C_5$经过一个1x1的卷积层得到，同时深层与浅层的特征图之间有横向连接。最终5层的特征图下采样的倍数分别为8， 16， 32， 64， 128（对应感受野越来越大）。每层的特征图只负责预测特定的目标，具体预测哪些目标由预测的最大距离来确定。越高层的特征图负责预测的最大距离也越大（高层特征图感受野大，适合预测大目标，而大目标需要回归的距离也往往越大）。为了进一步适应这种预测策略，FCOS将距离的映射函数$exp(x)$修改为$exp(s_ix)$，通过增加一个可训练的比例项$s$来更好地适应不同大小的预测范围。</p>
+<h2 id="Center-ness用于FCOS"><a href="#Center-ness用于FCOS" class="headerlink" title="Center-ness用于FCOS"></a>Center-ness用于FCOS</h2><p>之前提到过，FCOS回归的目标是当前位置到目标框四条边的距离。但这会存在一个问题，候选框种存在大量离目标框中心比较远的低质量候选框。FCOS中引入中心度（Center-ness）的概念来滤除大部分的低质量框。具体定义如下：</p>
+<p><img src="/2021/01/19/FCOS/image-20210118150021936.png" alt="image-20210118150021936"></p>
+<p>从上式可以看出，中心度大小由当前位置到四条边的距离的比值密切相关，当左右或上下的距离相近时（即当前位置靠近待回归的目标中心），中心度越高，反之中心度越低。通过将每个框的中心度与类别得分相乘，降低低质量候选框的类别得分，使得这些候选框在NMS过程中被抑制，从而提高检测的性能。</p>
+<h1 id="实验结果"><a href="#实验结果" class="headerlink" title="实验结果"></a>实验结果</h1><p><img src="/2021/01/19/FCOS/image-20210119134944351.png" alt="image-20210119134944351"></p>
+<p>这里只列出FCOS和其他主流检测模型的结果对比，从结果中可以看出：</p>
+<ul>
+<li>FCOS和RetinaNet的整体结构相似，相比较于一阶段有锚框的RetinaNet，无锚框的一阶段框架FCOS在均采用ResNet-101-FPN主干网络时，在AP上从39.1提高到41.5，性能提升十分可观。而相比于经典的二阶段有锚框的Faster R-CNN, 在依然采用ResNet-101-FPN主干网络时，性能提升更加显著。</li>
+<li>相比于无锚框的一阶段网络CornerNet，在多种主干网络下，FCOS的性能依然很有竞争力。</li>
+<li>FCOS在采用当前流行的ResNeXt-64x4d-101-FPN主干网络时，最高AP达到了44.7，已经处于同时期检测网络中state of art的水平。</li>
+</ul>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>目标检测发展至今，分别以R-CNN系列和YOLO系列为代表的二阶段网络和一阶段网络，在发展的四五年里都逐渐向锚框靠拢，虽然锚框的引入大幅度地提高了检测模型的性能，但由于锚框中超参数的存在，让模型对不同分布数据的适应能力变差。以FCOS、CenterNet、CornerNet为代表的无锚框检测模型的出现，无疑为解决目标检测任务提供了一种新的思路。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/计算机视觉/" rel="tag"># 计算机视觉</a>
+          
+            <a href="/tags/目标检测/" rel="tag"># 目标检测</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/11/ResNet-networks/" rel="next" title="ResNet的几种典型网络结构">
+                <i class="fa fa-chevron-left"></i> ResNet的几种典型网络结构
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/emoji.jpg"
+                alt="Meringue" />
+            
+              <p class="site-author-name" itemprop="name">Meringue</p>
+              <p class="site-description motion-element" itemprop="description">z_jiahuan@outlook.com</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">8</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/ZhouJiaHuan" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i></a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/sinat_34474705" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i></a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动机"><span class="nav-number">2.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#FCOS检测框架"><span class="nav-number">3.</span> <span class="nav-text">FCOS检测框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#整体框架"><span class="nav-number">3.1.</span> <span class="nav-text">整体框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#FPN用于FCOS"><span class="nav-number">3.2.</span> <span class="nav-text">FPN用于FCOS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Center-ness用于FCOS"><span class="nav-number">3.3.</span> <span class="nav-text">Center-ness用于FCOS</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#实验结果"><span class="nav-number">4.</span> <span class="nav-text">实验结果</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Meringue</span>
+
+  
+</div>
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Pisces</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+
+  
+
+</body>
+</html>
